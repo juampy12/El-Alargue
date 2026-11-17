@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Inscripcion al torneo de futbol 5 El Alargue: 16 equipos, dos sabados, Copa de Oro y Copa de Plata, y un gran tercer tiempo.">
+<meta name="theme-color" content="#09152b">
+<title>El Alargue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<style>
+/* Single committed brand look: deep navy + white, flat, planilla/scoreboard aesthetic.
+   Display = Barlow Condensed · Body = Inter · Labels & data = Space Mono */
+:root{
+  --navy:#09152b;
+  --bg:#09152b; --bg-2:#0b1a33; --surface:#0f1f3b; --surface-2:#13223f;
+  --ink:#f4f7fc; --muted:#9fabc4; --faint:#8491ad;
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.26);
+  --white:#ffffff; --focus:#9fc3ff;
+  --font-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --font-body:"Inter",system-ui,sans-serif;
+  --font-mono:"Space Mono",ui-monospace,monospace;
+  --maxw:1120px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:84px}
+html,body{background:var(--bg)}
+body{font-family:var(--font-body); color:var(--ink); line-height:1.6; margin:0;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px);
+  background:var(--bg); z-index:60}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus); outline-offset:3px}
+.wrap{max-width:var(--maxw); margin-inline:auto;
+  padding-inline:max(22px,env(safe-area-inset-left,0px))}
+.mono{font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.14em}
+
+/* scroll progress bar */
+#progress{position:fixed; top:0; left:0; height:2px; width:0; background:var(--white); z-index:70;
+  transition:width .08s linear}
+
+/* intro splash (~3s) */
+#intro{position:fixed; inset:0; z-index:200; background:var(--bg); display:grid; place-items:center;
+  padding:24px; animation:introOut .7s ease 2.6s forwards}
+.intro-inner{display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center; max-width:560px}
+.intro-logo{width:min(150px,38vw); height:auto; opacity:0; transform:scale(.82) translateY(8px);
+  animation:introLogo .9s cubic-bezier(.2,.7,.2,1) .1s forwards}
+.intro-name{font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+  font-size:clamp(2.4rem,9vw,4.2rem); letter-spacing:.02em; line-height:.9; margin-top:4px;
+  opacity:0; transform:translateY(12px); animation:introUp .7s ease .55s forwards}
+.intro-slogan{font-family:var(--font-display); font-weight:500; font-size:clamp(1.1rem,4.2vw,1.55rem);
+  color:var(--muted); line-height:1.12; max-width:22ch; opacity:0; transform:translateY(12px);
+  animation:introUp .7s ease .95s forwards}
+@keyframes introLogo{to{opacity:1; transform:none}}
+@keyframes introUp{to{opacity:1; transform:none}}
+@keyframes introOut{to{opacity:0; visibility:hidden; pointer-events:none}}
+
+/* buttons */
+.btn{position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.5em;
+  font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  font-size:1.05rem; text-decoration:none; cursor:pointer; border:1px solid transparent;
+  transition:transform .14s, background .14s, border-color .14s, box-shadow .14s}
+.btn-white{background:var(--white); color:var(--navy); padding:.6em 1.35em}
+.btn-white:hover{background:#e7edf8; transform:translateY(-2px); box-shadow:0 10px 24px -12px rgba(255,255,255,.5)}
+.btn-line{background:transparent; color:var(--ink); border-color:var(--line-2); padding:.58em 1.3em}
+.btn-line:hover{border-color:var(--white); transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-sm{font-size:.9rem; padding:.5em 1.05em}
+
+/* header */
+header{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background:var(--bg);
+  border-bottom:1px solid var(--line)}
+.bar{display:flex; align-items:center; gap:14px; height:64px}
+.brand{display:flex; align-items:center; gap:11px; text-decoration:none}
+.brand img{height:34px; width:auto; display:block}
+.brand .wm{font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+  letter-spacing:.08em; font-size:1.28rem}
+.bar .spacer{flex:1}
+header .btn{display:none}
+@media(min-width:560px){ header .btn{display:inline-flex} }
+
+/* ticker marquee */
+.strip{border-bottom:1px solid var(--line); background:var(--bg-2); overflow:hidden}
+.strip .track{display:flex; width:max-content; animation:marquee 34s linear infinite}
+.strip:hover .track{animation-play-state:paused}
+.grp{display:flex; align-items:center; gap:.4em 1.4em; padding:9px 0;
+  font-family:var(--font-mono); font-size:.72rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--muted); white-space:nowrap}
+.grp > span{padding-left:1.4em}
+.grp b{color:var(--ink); font-weight:700}
+.grp .sep{color:var(--faint)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* live badge */
+.live{display:inline-flex; align-items:center; gap:.6em; font-family:var(--font-mono);
+  font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink);
+  border:1px solid var(--line-2); padding:6px 12px; margin-bottom:22px}
+.live .dot{width:8px; height:8px; border-radius:50%; background:#5ad17f; position:relative}
+.live .dot::after{content:""; position:absolute; inset:-5px; border-radius:50%;
+  border:1px solid #5ad17f; animation:ping 2s ease-out infinite}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+
+/* hero */
+.hero .wrap{padding-block:46px 40px; display:grid; gap:36px; grid-template-columns:1fr; align-items:center}
+@media(min-width:840px){ .hero .wrap{grid-template-columns:1.15fr .85fr; gap:48px} }
+.eyebrow{font-family:var(--font-mono); font-size:.76rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--muted)}
+.hero h1{font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+  font-size:clamp(2.4rem,11vw,6.6rem); line-height:.9; letter-spacing:.004em; margin:14px 0 0;
+  text-wrap:balance; max-width:100%}
+.slogan{font-family:var(--font-display); font-weight:500; text-transform:none;
+  font-size:clamp(1.35rem,4.2vw,2.1rem); line-height:1.08; color:var(--ink); margin-top:18px;
+  max-width:20ch; border-left:3px solid var(--white); padding-left:16px}
+.hero .sub{color:var(--muted); margin-top:18px; max-width:46ch; font-size:1.05rem}
+.cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+.emblem{position:relative; display:flex; align-items:center; justify-content:center;
+  aspect-ratio:1; width:min(76%,300px); margin-inline:auto}
+.emblem img{position:relative; z-index:1; width:70%; height:auto; animation:float 6s ease-in-out infinite}
+.rings{position:absolute; inset:0; pointer-events:none}
+.rings::before,.rings::after{content:""; position:absolute; border-radius:50%}
+.rings::before{inset:0; border:1px dashed rgba(255,255,255,.16); animation:spin 44s linear infinite}
+.rings::after{inset:13%; border:1px dotted rgba(255,255,255,.1); animation:spin 30s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* countdown */
+.count{border-bottom:1px solid var(--line); background:var(--bg-2)}
+.count .wrap{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:22px; padding-block:26px}
+.count-head{display:flex; flex-direction:column; gap:4px}
+.count-title{font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+  font-size:1.6rem; letter-spacing:.02em; line-height:1; margin-top:8px}
+.count-when{font-family:var(--font-mono); font-size:.74rem; letter-spacing:.1em; color:var(--muted)}
+.count-grid{display:flex; gap:10px}
+.count .u{min-width:66px; border:1px solid var(--line); background:var(--bg); padding:12px 8px;
+  text-align:center; display:flex; flex-direction:column; gap:5px}
+.count .num{font-family:var(--font-display); font-weight:700; font-size:clamp(2rem,6vw,2.8rem);
+  line-height:.9; font-variant-numeric:tabular-nums}
+.count .lab{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--faint)}
+.count.done .count-when{color:var(--ink)}
+@media(max-width:560px){ .count .wrap{gap:16px} .count-grid{width:100%; justify-content:space-between; gap:8px}
+  .count .u{flex:1; min-width:0; padding:12px 4px} }
+
+/* scoreboard */
+.score{border-block:1px solid var(--line); background:var(--bg-2)}
+.score .wrap{display:grid; grid-template-columns:repeat(2,1fr); padding-inline:0}
+@media(min-width:720px){ .score .wrap{grid-template-columns:repeat(4,1fr)} }
+.score .cell{padding:26px 10px; text-align:center; border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line)}
+.score .cell:nth-child(2n){border-right:0}
+@media(min-width:720px){ .score .cell{border-bottom:0; border-right:1px solid var(--line)}
+  .score .cell:nth-child(2n){border-right:1px solid var(--line)} .score .cell:last-child{border-right:0} }
+.score .n{font-family:var(--font-display); font-weight:700; font-size:clamp(2.6rem,7vw,3.6rem);
+  line-height:.9; font-variant-numeric:tabular-nums}
+.score .l{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--muted); margin-top:9px}
+
+/* generic section */
+section{padding-block:clamp(48px,7vw,84px); scroll-margin-top:84px}
+.head{display:flex; align-items:baseline; gap:14px; margin-bottom:30px; flex-wrap:wrap}
+.head .no{font-family:var(--font-mono); font-size:.8rem; letter-spacing:.2em; color:var(--faint);
+  border:1px solid var(--line); padding:3px 9px}
+.head h2{font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+  font-size:clamp(2.1rem,5.6vw,3.2rem); line-height:1}
+.head p{color:var(--muted); width:100%; max-width:62ch; font-size:1.05rem; margin-top:4px}
+
+/* reveal (progressive enhancement; visible without JS / reduced motion) */
+.js .reveal{opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease}
+.js .reveal.in{opacity:1; transform:none}
+
+/* tercer tiempo */
+.tt{border-top:1px solid var(--line)}
+.tt-grid{display:grid; gap:34px; grid-template-columns:1fr}
+@media(min-width:820px){ .tt-grid{grid-template-columns:1fr 1fr; gap:48px} }
+.tt-lead{font-family:var(--font-display); font-weight:500; font-size:clamp(1.6rem,4.5vw,2.4rem);
+  line-height:1.12; text-transform:none}
+.tt-lead em{font-style:normal; color:var(--white); text-decoration:underline; text-decoration-thickness:2px;
+  text-underline-offset:4px}
+.tt-list{list-style:none; padding:0; margin:0; display:grid; gap:0}
+.tt-list li{display:grid; grid-template-columns:auto 1fr; gap:16px; padding:18px 2px;
+  border-top:1px solid var(--line); align-items:start; transition:padding-left .18s, background .18s}
+.tt-list li:last-child{border-bottom:1px solid var(--line)}
+.tt-list li:hover{padding-left:12px; background:linear-gradient(90deg,var(--surface),transparent)}
+.tt-list .k{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; color:var(--faint);
+  padding-top:4px}
+.tt-list .t b{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.25rem;
+  letter-spacing:.02em; display:block}
+.tt-list .t span{color:var(--muted); font-size:.98rem}
+
+/* formato */
+.days{display:grid; gap:0; grid-template-columns:1fr; border:1px solid var(--line)}
+@media(min-width:720px){ .days{grid-template-columns:1fr 1fr} }
+.day{padding:26px; transition:background .18s}
+.day:hover{background:var(--surface)}
+.day + .day{border-top:1px solid var(--line)}
+@media(min-width:720px){ .day + .day{border-top:0; border-left:1px solid var(--line)} }
+.day .tag{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--navy); background:var(--white); padding:4px 10px; display:inline-block; font-weight:700}
+.day h3{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.9rem; margin-top:16px}
+.day .when{font-family:var(--font-mono); font-size:.8rem; letter-spacing:.08em; color:var(--muted); margin-top:6px}
+.day p{color:var(--muted); margin-top:14px}
+.cups{display:grid; gap:0; grid-template-columns:1fr; border:1px solid var(--line); border-top:0}
+@media(min-width:720px){ .cups{grid-template-columns:1fr 1fr} }
+.cup{padding:24px; transition:background .18s}
+.cup:hover{background:var(--surface)}
+.cup + .cup{border-top:1px solid var(--line)}
+@media(min-width:720px){ .cup + .cup{border-top:0; border-left:1px solid var(--line)} }
+.cup .mh{display:flex; align-items:center; gap:11px}
+.cup .m{width:15px; height:15px; border-radius:50%}
+.cup.oro .m{background:var(--white); box-shadow:0 0 0 4px rgba(255,255,255,.12)}
+.cup.plata .m{background:var(--faint)}
+.cup .mh b{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.5rem;
+  letter-spacing:.03em}
+.cup p{color:var(--muted); margin-top:12px}
+.cup .q{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.14em; color:var(--faint); margin-top:14px}
+
+/* bases */
+.bases{border-top:1px solid var(--line)}
+.rules{display:grid; gap:0; grid-template-columns:1fr; border:1px solid var(--line)}
+.rule{display:grid; grid-template-columns:auto 1fr; gap:18px; padding:22px 24px; transition:background .18s}
+.rule:hover{background:var(--surface)}
+.rule + .rule{border-top:1px solid var(--line)}
+.rule .rn{font-family:var(--font-mono); font-weight:700; font-size:1.1rem; color:var(--faint)}
+.rule h3{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.3rem; letter-spacing:.02em}
+.rule p{color:var(--muted); margin-top:7px}
+.rule .pill{display:inline-block; font-family:var(--font-mono); font-size:.66rem; letter-spacing:.14em;
+  text-transform:uppercase; border:1px solid var(--line-2); color:var(--ink); padding:3px 8px; margin-top:12px}
+
+/* inscripción */
+.reg{border-top:1px solid var(--line)}
+.reg-grid{display:grid; gap:34px; grid-template-columns:1fr}
+@media(min-width:900px){ .reg-grid{grid-template-columns:.8fr 1.2fr; gap:48px; align-items:start} }
+.reg-copy .steps{list-style:none; padding:0; margin:22px 0 0; counter-reset:s; display:grid; gap:0}
+.reg-copy .steps li{display:grid; grid-template-columns:auto 1fr; gap:16px; padding:16px 0;
+  border-top:1px solid var(--line); color:var(--muted)}
+.reg-copy .steps li:last-child{border-bottom:1px solid var(--line)}
+.reg-copy .steps li::before{counter-increment:s; content:"0" counter(s); font-family:var(--font-mono);
+  font-weight:700; color:var(--faint)}
+.reg-copy .steps b{color:var(--ink)}
+.sheet{border:1px solid var(--line-2); background:var(--surface)}
+.sheet-h{display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px 20px; border-bottom:1px solid var(--line); background:var(--bg-2)}
+.sheet-h b{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.25rem;
+  letter-spacing:.03em}
+.sheet-h .mono{font-size:.68rem; color:var(--faint)}
+.sheet-b{padding:20px}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:15px}
+.field label{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--muted)}
+.field label .req{color:var(--white)}
+.field input,.field textarea{font-family:var(--font-body); font-size:1rem; color:var(--ink);
+  background:var(--bg); border:1px solid var(--line); border-radius:0; padding:.68em .8em; width:100%;
+  transition:border-color .14s, box-shadow .14s}
+.field input::placeholder,.field textarea::placeholder{color:#5a6681}
+.field input:focus,.field textarea:focus{outline:none; border-color:var(--white);
+  box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+.field.err input,.field.err textarea{border-color:#d9736f}
+.field .msg{font-family:var(--font-mono); font-size:.66rem; letter-spacing:.06em; color:#e49490; display:none}
+.field.err .msg{display:block}
+.two{display:grid; gap:0 16px; grid-template-columns:1fr}
+@media(min-width:520px){ .two{grid-template-columns:1fr 1fr} }
+.roster-h{display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+  margin:6px 0 12px; padding-top:18px; border-top:1px solid var(--line)}
+.roster-h .t{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.15rem;
+  letter-spacing:.03em}
+.roster-h .c{font-family:var(--font-mono); font-size:.66rem; letter-spacing:.12em; color:var(--faint)}
+.roster{display:grid; gap:8px; grid-template-columns:1fr}
+@media(min-width:520px){ .roster{grid-template-columns:1fr 1fr; gap:8px 16px} }
+.pl{display:grid; grid-template-columns:auto 1fr; align-items:center; gap:10px;
+  border:1px solid var(--line); background:var(--bg); transition:border-color .14s}
+.pl .pn{font-family:var(--font-mono); font-size:.8rem; color:var(--faint); padding:0 2px 0 10px}
+.pl input{border:0; background:transparent; padding:.6em .7em .6em 0; color:var(--ink); font-size:.98rem;
+  width:100%; font-family:var(--font-body)}
+.pl input:focus{outline:none}
+.pl:focus-within{border-color:var(--white)}
+.decl{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; margin:20px 0 6px;
+  padding:16px; border:1px solid var(--line); transition:border-color .14s}
+.decl.err{border-color:#d9736f}
+.decl input{width:20px; height:20px; margin:1px 0 0; accent-color:var(--white); flex:0 0 auto}
+.decl label{font-size:.92rem; color:var(--muted); line-height:1.5}
+.decl label b{color:var(--ink)}
+.sheet .btn-white{width:100%; padding:.85em; font-size:1.15rem; margin-top:8px}
+.sheet-foot{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.04em; color:var(--faint);
+  text-align:center; margin-top:14px}
+.sheet-foot a{color:var(--ink); text-decoration:underline; text-underline-offset:3px}
+.copybox{display:none; margin-top:16px; border:1px dashed var(--line-2); padding:16px; background:var(--bg)}
+.copybox.show{display:block}
+.copybox pre{font-family:var(--font-body); font-size:.92rem; white-space:pre-wrap; word-break:break-word;
+  margin:0 0 12px; color:var(--ink)}
+
+/* footer */
+footer{border-top:1px solid var(--line); background:var(--bg-2)}
+footer .wrap{padding-block:32px; display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px}
+footer img{height:30px; width:auto}
+footer .f-sp{flex:1}
+footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em; color:var(--faint);
+  text-transform:uppercase}
+
+/* mobile sticky CTA */
+#mcta{position:fixed; left:0; right:0; bottom:0; z-index:45; display:none;
+  padding:11px max(16px,env(safe-area-inset-left,0px)) calc(11px + env(safe-area-inset-bottom,0px));
+  background:color-mix(in srgb,var(--bg) 90%,transparent); backdrop-filter:blur(10px);
+  border-top:1px solid var(--line); transform:translateY(130%); transition:transform .3s ease}
+#mcta.show{transform:none}
+#mcta .btn{width:100%}
+@media(max-width:559px){ #mcta{display:block} body{padding-bottom:74px} }
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important}
+  .js .reveal{opacity:1!important; transform:none!important; transition:none!important}
+  #mcta{transition:none}
+  #intro{display:none}
+}
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<div id="progress" aria-hidden="true"></div>
+
+<div id="intro">
+  <div class="intro-inner">
+    <img class="intro-logo" src="el-alargue-logo.png" alt="El Alargue">
+    <div class="intro-name">El Alargue</div>
+    <p class="intro-slogan">El tiempo extra que nadie quiere que termine.</p>
+  </div>
+</div>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top"><img src="el-alargue-logo.png" alt="El Alargue"><span class="wm">El Alargue</span></a>
+    <span class="spacer"></span>
+    <a class="btn btn-white btn-sm" href="#inscripcion">Inscribite</a>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="track">
+    <div class="grp">
+      <span><b>Fútbol 5</b></span><span class="sep">/</span>
+      <span><b>16</b> equipos</span><span class="sep">/</span>
+      <span><b>19 &amp; 26</b> dic</span><span class="sep">/</span>
+      <span><b>3</b> canchas</span><span class="sep">/</span>
+      <span>Copa de <b>Oro</b> &amp; <b>Plata</b></span><span class="sep">/</span>
+      <span>Tercer tiempo con <b>DJ</b></span><span class="sep">/</span>
+    </div>
+    <div class="grp" aria-hidden="true">
+      <span><b>Fútbol 5</b></span><span class="sep">/</span>
+      <span><b>16</b> equipos</span><span class="sep">/</span>
+      <span><b>19 &amp; 26</b> dic</span><span class="sep">/</span>
+      <span><b>3</b> canchas</span><span class="sep">/</span>
+      <span>Copa de <b>Oro</b> &amp; <b>Plata</b></span><span class="sep">/</span>
+      <span>Tercer tiempo con <b>DJ</b></span><span class="sep">/</span>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="live"><span class="dot"></span>Inscripciones abiertas</span>
+        <div class="eyebrow">Torneo de Fútbol 5 — Diciembre 2026</div>
+        <h1>El Alargue</h1>
+        <p class="slogan">El tiempo extra que nadie quiere que termine.</p>
+        <p class="sub">16 equipos, dos sábados de partidos y el mejor tercer tiempo. Venís a jugar y te quedás a compartir con tu grupo.</p>
+        <div class="cta">
+          <a class="btn btn-white" href="#inscripcion">Inscribí tu equipo</a>
+          <a class="btn btn-line" href="#bases">Ver las bases</a>
+        </div>
+      </div>
+      <div class="emblem"><span class="rings" aria-hidden="true"></span><img src="el-alargue-logo.png" alt="Logo El Alargue"></div>
+    </div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="count" id="count">
+    <div class="wrap">
+      <div class="count-head">
+        <span class="eyebrow">Cuenta regresiva</span>
+        <div class="count-title">Patada inicial</div>
+        <div class="count-when">Sábado 19 de diciembre · 17:00 hs</div>
+      </div>
+      <div class="count-grid">
+        <div class="u"><span class="num" id="cd-d">00</span><span class="lab">Días</span></div>
+        <div class="u"><span class="num" id="cd-h">00</span><span class="lab">Horas</span></div>
+        <div class="u"><span class="num" id="cd-m">00</span><span class="lab">Min</span></div>
+        <div class="u"><span class="num" id="cd-s">00</span><span class="lab">Seg</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOREBOARD -->
+  <div class="score">
+    <div class="wrap">
+      <div class="cell"><div class="n" data-count="16">16</div><div class="l">Equipos</div></div>
+      <div class="cell"><div class="n" data-count="2">2</div><div class="l">Sábados</div></div>
+      <div class="cell"><div class="n" data-count="3">3</div><div class="l">Canchas</div></div>
+      <div class="cell"><div class="n" data-count="2">2</div><div class="l">Copas</div></div>
+    </div>
+  </div>
+
+  <!-- TERCER TIEMPO -->
+  <section class="tt">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">01</span><h2>El tercer tiempo</h2></div>
+      <div class="tt-grid">
+        <div class="reveal">
+          <p class="tt-lead">No termina con el último partido. Ahí <em>empieza el after</em>: música, algo para tomar y la mesa con los amigos.</p>
+          <p class="sub" style="color:var(--muted); margin-top:18px">Los partidos arrancan a la tarde y, cuando cierra la jornada, la cancha cambia de modo. El Alargue es tanto el torneo como lo que pasa después.</p>
+        </div>
+        <ul class="tt-list reveal">
+          <li><span class="k">DJ</span><span class="t"><b>Música en vivo</b><span>Al terminar los partidos, los dos sábados.</span></span></li>
+          <li><span class="k">Barra</span><span class="t"><b>Algo para tomar</b><span>Fuera de la cancha, para seguirla tranquilos.</span></span></li>
+          <li><span class="k">Grupo</span><span class="t"><b>El plan con los amigos</b><span>Vení en banda: la idea es quedarse a compartir.</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATO -->
+  <section>
+    <div class="wrap">
+      <div class="head reveal"><span class="no">02</span><h2>Cómo se juega</h2>
+        <p>16 equipos en 4 zonas de 4. El primer sábado se define la tabla; el segundo, los mano a mano. 3 canchas en simultáneo, de 17:00 a 22:00.</p></div>
+      <div class="days reveal">
+        <div class="day">
+          <span class="tag">Sábado 1 · 19 Dic</span>
+          <h3>Fase de grupos</h3>
+          <div class="when">17:00 – 22:00 hs</div>
+          <p>Todos contra todos dentro de cada zona: 3 partidos por equipo. Al cierre se arma la tabla que define quién va a cada copa — y arranca el primer tercer tiempo.</p>
+        </div>
+        <div class="day">
+          <span class="tag">Sábado 2 · 26 Dic</span>
+          <h3>Eliminación directa</h3>
+          <div class="when">17:00 – 22:00 hs</div>
+          <p>Cuartos, semis y finales de las dos copas. Se define todo mano a mano y cierra con la premiación y el after más grande.</p>
+        </div>
+      </div>
+      <div class="cups reveal">
+        <div class="cup oro">
+          <div class="mh"><span class="m"></span><b>Copa de Oro</b></div>
+          <p>Los <b>1º y 2º de cada zona</b> (8 equipos). La llave de los que pasaron primeros, por el título.</p>
+          <div class="q">Cuartos · Semis · Final</div>
+        </div>
+        <div class="cup plata">
+          <div class="mh"><span class="m"></span><b>Copa de Plata</b></div>
+          <p>Los <b>3º y 4º de cada zona</b> (8 equipos). Segunda chance para seguir jugando y pelear su propia final.</p>
+          <div class="q">Cuartos · Semis · Final</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BASES -->
+  <section class="bases" id="bases">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">03</span><h2>Las bases</h2>
+        <p>Lo esencial para anotarse. El resto de las bases (puntajes, duración de los partidos y desempates) se confirman antes del torneo.</p></div>
+      <div class="rules reveal">
+        <div class="rule">
+          <div class="rn">01</div>
+          <div>
+            <h3>Lista de buena fe</h3>
+            <p>Cada equipo presenta una lista de buena fe de hasta <b>10 jugadores</b>. Solo pueden jugar quienes figuren en esa lista.</p>
+            <span class="pill">10 jugadores por equipo</span>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rn">02</div>
+          <div>
+            <h3>Sin jugadores de club</h3>
+            <p>No pueden participar jugadores que <b>jueguen actualmente al fútbol en algún club</b>. Es un torneo entre amigos, no para fichados.</p>
+            <span class="pill">Nivel amateur</span>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rn">03</div>
+          <div>
+            <h3>Fútbol 5</h3>
+            <p>Se juega 5 contra 5. Formato de zonas el primer sábado y eliminación directa el segundo, con Copa de Oro y Copa de Plata.</p>
+            <span class="pill">5 en cancha</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSCRIPCIÓN -->
+  <section class="reg" id="inscripcion">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">04</span><h2>Inscribí tu equipo</h2></div>
+      <div class="reg-grid">
+        <div class="reg-copy reveal">
+          <p class="sub" style="color:var(--muted)">Completá la planilla y la enviás directo por WhatsApp al organizador. Cupos limitados a 16 equipos: entran por orden de inscripción.</p>
+          <ol class="steps">
+            <li><span>Cargás los datos del equipo y la <b>lista de buena fe</b>.</span></li>
+            <li><span>Tocás enviar y se abre <b>WhatsApp</b> con todo listo.</span></li>
+            <li><span>Te confirmamos el cupo y <b>la seña</b> para reservarlo.</span></li>
+          </ol>
+        </div>
+
+        <div class="sheet reveal">
+          <div class="sheet-h"><b>Planilla de inscripción</b><span class="mono">El Alargue 2026</span></div>
+          <div class="sheet-b">
+            <form id="regForm" novalidate>
+              <div class="field" id="f-equipo">
+                <label for="equipo">Nombre del equipo <span class="req">*</span></label>
+                <input id="equipo" name="equipo" type="text" placeholder="Ej: Los del fondo" autocomplete="off">
+                <span class="msg">Poné el nombre del equipo.</span>
+              </div>
+              <div class="two">
+                <div class="field" id="f-capitan">
+                  <label for="capitan">Capitán / referente <span class="req">*</span></label>
+                  <input id="capitan" name="capitan" type="text" placeholder="Nombre y apellido" autocomplete="name">
+                  <span class="msg">Decinos quién es el capitán.</span>
+                </div>
+                <div class="field" id="f-wsp">
+                  <label for="wsp">WhatsApp del capitán <span class="req">*</span></label>
+                  <input id="wsp" name="wsp" type="tel" inputmode="tel" placeholder="Ej: 11 2345 6789" autocomplete="tel">
+                  <span class="msg">Dejá un número de contacto.</span>
+                </div>
+              </div>
+              <div class="field" id="f-email">
+                <label for="email">Email (opcional)</label>
+                <input id="email" name="email" type="email" placeholder="tuequipo@mail.com" autocomplete="email">
+                <span class="msg">Revisá el email.</span>
+              </div>
+
+              <div class="roster-h">
+                <span class="t">Lista de buena fe</span>
+                <span class="c">Hasta 10 jugadores</span>
+              </div>
+              <div class="roster" id="roster"></div>
+
+              <div class="decl" id="f-decl">
+                <input id="decl" type="checkbox">
+                <label for="decl"><b>Declaro que la lista es de buena fe</b> y que ningún jugador juega actualmente al fútbol en un club.</label>
+              </div>
+
+              <div class="field" id="f-com" style="margin-top:4px">
+                <label for="comentarios">Comentarios (opcional)</label>
+                <textarea id="comentarios" name="comentarios" rows="2" placeholder="Horario que les queda mejor, con quién vienen, etc."></textarea>
+              </div>
+
+              <a class="btn btn-white" id="submitBtn" href="#" target="_blank" rel="noopener">Enviar inscripción por WhatsApp</a>
+            </form>
+            <div class="copybox" id="copybox">
+              <pre id="copytext"></pre>
+              <button class="btn btn-line btn-sm" id="copyBtn" type="button" style="width:100%">Copiar datos</button>
+            </div>
+            <p class="sheet-foot">¿Preferís escribir? <a id="wspLink" href="#" target="_blank" rel="noopener">Mandanos un WhatsApp</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="el-alargue-logo.png" alt="El Alargue">
+    <span class="f-sp"></span>
+    <span class="muted">El Alargue · Torneo de Fútbol 5 · Tercer tiempo garantizado</span>
+  </div>
+</footer>
+
+<div id="mcta"><a class="btn btn-white" href="#inscripcion">Inscribí tu equipo</a></div>
+
+<script>
+(function(){
+  "use strict";
+  var RM = false;
+  try{ RM = matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+
+  /* ======= CONFIG — editá estos valores ======= */
+  var CONFIG = {
+    whatsapp: "",            // número del organizador, formato internacional sin "+". Ej: "5491123456789"
+    precio:   "A confirmar", // seña / costo de inscripción
+    sede:     "A confirmar"  // lugar del torneo
+  };
+  /* ============================================= */
+
+  // ---- intro splash: remove after it plays; click to skip ----
+  var intro = document.getElementById('intro');
+  if(intro){
+    var killIntro = function(){ if(intro && intro.parentNode){ intro.parentNode.removeChild(intro); intro = null; } };
+    setTimeout(killIntro, 3600);
+    intro.addEventListener('click', function(){
+      if(!intro) return;
+      intro.style.transition = 'opacity .4s ease';
+      intro.style.opacity = '0'; intro.style.pointerEvents = 'none';
+      setTimeout(killIntro, 420);
+    });
+  }
+
+  // ---- scroll progress bar ----
+  var prog = document.getElementById('progress');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var p = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+    prog.style.width = (p*100).toFixed(1) + '%';
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  addEventListener('resize', onScroll); onScroll();
+
+  // ---- reveal on scroll ----
+  var reveals = [].slice.call(document.querySelectorAll('.reveal'));
+  if(RM || !('IntersectionObserver' in window)){
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var ro = new IntersectionObserver(function(ents){
+      ents.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, {threshold:.14, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el){ ro.observe(el); });
+  }
+
+  // ---- scoreboard count-up ----
+  var nums = [].slice.call(document.querySelectorAll('.score .n'));
+  function countUp(el){
+    var target = parseInt(el.getAttribute('data-count'),10) || 0;
+    if(RM){ el.textContent = target; return; }
+    var dur = 900, t0 = null;
+    function step(ts){
+      if(!t0) t0 = ts;
+      var k = Math.min((ts-t0)/dur, 1);
+      var eased = 1 - Math.pow(1-k, 3);
+      el.textContent = Math.round(eased*target);
+      if(k<1) requestAnimationFrame(step); else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+  if(!('IntersectionObserver' in window)){
+    nums.forEach(function(el){ el.textContent = el.getAttribute('data-count'); });
+  } else {
+    var no = new IntersectionObserver(function(ents){
+      ents.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); no.unobserve(e.target); } });
+    }, {threshold:.6});
+    nums.forEach(function(el){ if(!RM) el.textContent = '0'; no.observe(el); });
+  }
+
+  // ---- mobile sticky CTA (show after hero) ----
+  var mcta = document.getElementById('mcta');
+  var hero = document.querySelector('.hero');
+  if('IntersectionObserver' in window && hero){
+    var mo = new IntersectionObserver(function(ents){
+      ents.forEach(function(e){ mcta.classList.toggle('show', !e.isIntersecting); });
+    }, {threshold:0});
+    mo.observe(hero);
+  }
+
+  // ---- countdown to kickoff (Sáb 19 Dic 2026, 17:00, ART -03:00) ----
+  (function(){
+    var target = new Date('2026-12-19T17:00:00-03:00').getTime();
+    var cd = {d:document.getElementById('cd-d'), h:document.getElementById('cd-h'),
+              m:document.getElementById('cd-m'), s:document.getElementById('cd-s')};
+    var band = document.getElementById('count');
+    if(!cd.d || !cd.h || !cd.m || !cd.s) return;
+    function pad(n){ return (n<10?'0':'')+n; }
+    var iv;
+    function tick(){
+      var diff = target - Date.now();
+      if(diff <= 0){
+        cd.d.textContent='00'; cd.h.textContent='00'; cd.m.textContent='00'; cd.s.textContent='00';
+        if(band){ band.classList.add('done');
+          var w=band.querySelector('.count-when'); if(w) w.textContent='¡El torneo arrancó!'; }
+        if(iv) clearInterval(iv); return;
+      }
+      var t = Math.floor(diff/1000);
+      var d = Math.floor(t/86400); t -= d*86400;
+      var h = Math.floor(t/3600);  t -= h*3600;
+      var m = Math.floor(t/60);    t -= m*60;
+      cd.d.textContent = pad(d); cd.h.textContent = pad(h);
+      cd.m.textContent = pad(m); cd.s.textContent = pad(t);
+    }
+    tick(); iv = setInterval(tick, 1000);
+  })();
+
+  // ---- registration form ----
+  var roster = document.getElementById('roster');
+  for(var i=1;i<=10;i++){
+    var d = document.createElement('div'); d.className='pl';
+    var n = document.createElement('span'); n.className='pn'; n.textContent = (i<10?'0':'')+i;
+    var inp = document.createElement('input'); inp.type='text'; inp.id='pl'+i;
+    inp.placeholder = 'Jugador '+i; inp.setAttribute('autocomplete','off');
+    d.appendChild(n); d.appendChild(inp); roster.appendChild(d);
+  }
+
+  var btn = document.getElementById('submitBtn');
+  var copybox = document.getElementById('copybox');
+  var copytext = document.getElementById('copytext');
+  var copyBtn = document.getElementById('copyBtn');
+  var wspLink = document.getElementById('wspLink');
+  var decl = document.getElementById('decl');
+
+  var F = {
+    equipo:{el:document.getElementById('equipo'), wrap:document.getElementById('f-equipo'), req:true},
+    capitan:{el:document.getElementById('capitan'), wrap:document.getElementById('f-capitan'), req:true},
+    wsp:{el:document.getElementById('wsp'), wrap:document.getElementById('f-wsp'), req:true},
+    email:{el:document.getElementById('email'), wrap:document.getElementById('f-email'), req:false},
+    comentarios:{el:document.getElementById('comentarios'), wrap:null, req:false}
+  };
+  function val(k){ return (F[k].el.value||'').trim(); }
+  function players(){
+    var out=[];
+    for(var j=1;j<=10;j++){ var v=(document.getElementById('pl'+j).value||'').trim(); if(v) out.push(v); }
+    return out;
+  }
+  function buildMessage(){
+    var L=[];
+    L.push('Inscripción — EL ALARGUE (Fútbol 5)');
+    L.push('');
+    L.push('Equipo: '+val('equipo'));
+    L.push('Capitán: '+val('capitan'));
+    L.push('WhatsApp: '+val('wsp'));
+    if(val('email')) L.push('Email: '+val('email'));
+    var pl=players();
+    if(pl.length){
+      L.push(''); L.push('Lista de buena fe ('+pl.length+'):');
+      pl.forEach(function(p,idx){ L.push((idx+1)+'. '+p); });
+    }
+    L.push('');
+    L.push('Declaro que la lista es de buena fe y que ningún jugador juega actualmente en un club.');
+    if(val('comentarios')){ L.push(''); L.push('Comentarios: '+val('comentarios')); }
+    return L.join('\n');
+  }
+  function waUrl(t){ return (CONFIG.whatsapp?('https://wa.me/'+CONFIG.whatsapp):'https://wa.me/')+'?text='+encodeURIComponent(t); }
+  function refresh(){
+    btn.href = CONFIG.whatsapp ? waUrl(buildMessage()) : '#';
+    wspLink.href = CONFIG.whatsapp ? ('https://wa.me/'+CONFIG.whatsapp) : '#';
+  }
+  function emailOk(v){ return !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function validate(){
+    var ok=true, first=null;
+    ['equipo','capitan','wsp'].forEach(function(k){
+      var bad=!val(k); F[k].wrap.classList.toggle('err',bad);
+      if(bad){ ok=false; if(!first) first=F[k].el; }
+    });
+    var ebad=!emailOk(val('email')); F.email.wrap.classList.toggle('err',ebad);
+    if(ebad){ ok=false; if(!first) first=F.email.el; }
+    var dbad=!decl.checked; document.getElementById('f-decl').classList.toggle('err',dbad);
+    if(dbad){ ok=false; if(!first) first=decl; }
+    if(first) first.focus();
+    return ok;
+  }
+  var inputs = document.querySelectorAll('#regForm input, #regForm textarea');
+  inputs.forEach(function(el){
+    el.addEventListener('input', function(){
+      if(F[el.id] && F[el.id].wrap) F[el.id].wrap.classList.remove('err');
+      if(el===decl) document.getElementById('f-decl').classList.remove('err');
+      refresh();
+    });
+  });
+  decl.addEventListener('change', function(){ document.getElementById('f-decl').classList.remove('err'); refresh(); });
+  btn.addEventListener('click', function(e){
+    if(!validate()){ e.preventDefault(); return; }
+    refresh();
+    if(!CONFIG.whatsapp){
+      e.preventDefault();
+      copytext.textContent = buildMessage();
+      copybox.classList.add('show');
+      copybox.scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
+    }
+  });
+  copyBtn.addEventListener('click', function(){
+    var t=copytext.textContent;
+    function fb(){ var r=document.createRange(); r.selectNodeContents(copytext);
+      var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        copyBtn.textContent='¡Copiado!'; setTimeout(function(){copyBtn.textContent='Copiar datos';},1600);
+      }).catch(fb);
+    } else fb();
+  });
+  refresh();
+})();
+</script>
+
+</body>
+</html>
