@@ -80,6 +80,9 @@ header{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background
 .bar .spacer{flex:1}
 header .btn{display:none}
 @media(min-width:560px){ header .btn{display:inline-flex} }
+.fx-link{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+  font-size:.95rem; text-decoration:none; color:var(--muted); padding:.4em .3em; transition:color .14s}
+.fx-link:hover{color:var(--ink)}
 
 /* ticker marquee */
 .strip{border-bottom:1px solid var(--line); background:var(--bg-2); overflow:hidden}
@@ -335,6 +338,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
   <div class="wrap bar">
     <a class="brand" href="#top"><img src="el-alargue-logo.png" alt="El Alargue"><span class="wm">El Alargue</span></a>
     <span class="spacer"></span>
+    <a class="fx-link" href="fixture.html">Fixture</a>
     <a class="btn btn-white btn-sm" href="#inscripcion">Inscribite</a>
   </div>
 </header>
