@@ -8,19 +8,23 @@
 <meta name="theme-color" content="#09152b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
 :root{
-  --navy:#09152b; --bg:#09152b; --bg-2:#0b1a33; --surface:#0f1f3b; --surface-2:#13223f;
+  --navy:#09152b; --bg:#09152b; --bg-2:#0b1a33; --surface:#11203c; --surface-2:#16284a;
   --ink:#f4f7fc; --muted:#9fabc4; --faint:#8491ad;
   --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.26); --white:#fff; --focus:#9fc3ff;
-  --win:#5ad17f; --live:#f0b24a;
+  /* vivid zone + cup colors */
+  --zA:#35a7f5; --zB:#2fd08a; --zC:#ffa33f; --zD:#ff5f8d;
+  --oro:#f3c550; --plata:#aebfdd;
+  --live:#ff4d4d; --win:#36d88f;
   --font-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --font-body:"Inter",system-ui,sans-serif;
   --font-mono:"Space Mono",ui-monospace,monospace;
-  --maxw:1080px; color-scheme:dark;
+  --maxw:1100px; color-scheme:dark;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 html,body{background:var(--bg)}
 body{font-family:var(--font-body); color:var(--ink); line-height:1.55; margin:0; -webkit-font-smoothing:antialiased; overflow-x:hidden}
 a{color:inherit}
@@ -35,112 +39,148 @@ header{position:sticky; top:0; z-index:50; background:var(--bg); border-bottom:1
 .brand img{height:30px; width:auto; display:block}
 .brand .wm{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.07em; font-size:1.18rem}
 .bar .spacer{flex:1}
-.nav{display:flex; gap:4px}
-.nav a{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.05em;
-  font-size:.92rem; text-decoration:none; color:var(--muted); padding:.5em .8em; border-radius:0}
-.nav a.on{color:var(--ink); box-shadow:inset 0 -2px 0 var(--white)}
+.nav{display:flex; gap:2px}
+.nav a{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  font-size:.9rem; text-decoration:none; color:var(--muted); padding:.5em .7em}
+.nav a.on{color:var(--ink); box-shadow:inset 0 -2px 0 var(--zA)}
 .nav a:hover{color:var(--ink)}
 
-/* title band */
-.hero{border-bottom:1px solid var(--line); background:var(--bg-2)}
-.hero .wrap{padding-block:26px 24px}
+/* hero */
+.hero{border-bottom:1px solid var(--line); background:
+  radial-gradient(120% 140% at 0% 0%, rgba(53,167,245,.10), transparent 45%),
+  radial-gradient(120% 140% at 100% 0%, rgba(255,95,141,.10), transparent 45%), var(--bg-2)}
+.hero .wrap{padding-block:26px 22px}
 .hero .eyebrow{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted)}
 .hero h1{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:clamp(2.2rem,7vw,3.4rem); line-height:.95; margin:8px 0 0}
-.note{display:flex; gap:10px; align-items:flex-start; margin-top:16px; border:1px solid var(--line); padding:12px 14px; background:var(--surface); max-width:70ch}
-.note svg{flex:0 0 auto; width:18px; height:18px; color:var(--live); margin-top:2px}
-.note p{margin:0; color:var(--muted); font-size:.92rem}
+.hero h1 b{color:var(--zA)}
+.note{display:flex; gap:10px; align-items:flex-start; margin-top:16px; border:1px solid color-mix(in srgb,var(--oro) 40%,var(--line));
+  border-left:3px solid var(--oro); padding:11px 14px; background:color-mix(in srgb,var(--oro) 7%,var(--surface)); max-width:72ch; border-radius:8px}
+.note svg{flex:0 0 auto; width:18px; height:18px; color:var(--oro); margin-top:2px}
+.note p{margin:0; color:var(--muted); font-size:.9rem}
 
 /* controls */
-.controls{display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding-block:22px 6px}
-.seg{display:inline-flex; border:1px solid var(--line-2); background:var(--bg-2)}
-.seg button{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em;
-  font-size:.92rem; color:var(--muted); background:transparent; border:0; padding:.55em 1.05em; cursor:pointer; transition:.14s}
+.controls{display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding-block:22px 4px; position:sticky; top:60px; z-index:30;
+  background:linear-gradient(var(--bg) 70%, transparent)}
+.seg{display:inline-flex; border:1px solid var(--line-2); background:var(--bg-2); border-radius:9px; overflow:hidden}
+.seg button{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+  font-size:.9rem; color:var(--muted); background:transparent; border:0; padding:.55em 1em; cursor:pointer; transition:.15s}
 .seg button + button{border-left:1px solid var(--line)}
 .seg button.on{background:var(--white); color:var(--navy)}
-.seg button:not(.on):hover{color:var(--ink)}
-.seg.small button{font-size:.82rem; padding:.5em .9em}
+.seg button:not(.on):hover{color:var(--ink); background:rgba(255,255,255,.05)}
+.seg.small button{font-size:.8rem; padding:.5em .85em}
 .controls .sp{flex:1}
-.upd{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.08em; color:var(--faint); text-transform:uppercase}
+.upd{font-family:var(--font-mono); font-size:.66rem; letter-spacing:.08em; color:var(--faint); text-transform:uppercase}
 
-main{padding-bottom:60px}
-.section-h{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--faint); margin:26px 0 10px; display:flex; align-items:center; gap:10px}
-.section-h::after{content:""; flex:1; height:1px; background:var(--line)}
+main{padding:8px 0 64px}
 
-/* match list */
-.matches{display:grid; gap:0; border:1px solid var(--line)}
-.match{display:grid; grid-template-columns:72px 1fr auto 1fr; align-items:center; gap:12px; padding:13px 14px; transition:background .15s}
-.match + .match{border-top:1px solid var(--line)}
-.match:hover{background:var(--surface)}
-.match .slot{font-family:var(--font-mono); font-size:.74rem; line-height:1.3; color:var(--muted)}
-.match .slot .c{display:block; color:var(--faint); font-size:.66rem; letter-spacing:.1em}
-.match .t{font-family:var(--font-display); font-weight:600; text-transform:uppercase; letter-spacing:.01em; font-size:1.08rem}
-.match .t.home{text-align:right}
-.match .t.away{text-align:left}
-.match .t.ph{color:var(--muted); font-weight:500}
-.match .t .zchip{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.08em; color:var(--faint); text-transform:uppercase}
-.result{min-width:74px; text-align:center; font-family:var(--font-display); font-weight:700; font-size:1.3rem;
-  font-variant-numeric:tabular-nums; line-height:1; white-space:nowrap}
-.result .pen{display:block; font-family:var(--font-mono); font-weight:400; font-size:.6rem; color:var(--faint); letter-spacing:.06em; margin-top:3px}
-.result.vs{color:var(--faint); font-family:var(--font-mono); font-size:.8rem; letter-spacing:.1em; font-weight:400}
-.result .w{color:var(--win)}
-.badge-live{display:inline-block; font-family:var(--font-mono); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--navy); background:var(--live); padding:2px 6px; margin-top:4px}
-.libre{padding:11px 14px; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:.72rem;
-  letter-spacing:.06em; color:var(--faint); text-transform:uppercase}
+/* group headers */
+.timehead{display:flex; align-items:center; gap:12px; margin:24px 0 12px}
+.timehead .t{font-family:var(--font-display); font-weight:700; font-size:1.5rem; line-height:1}
+.timehead .t small{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.14em; color:var(--faint); margin-left:6px; text-transform:uppercase}
+.timehead::after{content:""; flex:1; height:1px; background:var(--line)}
+.zonehead{display:flex; align-items:center; gap:12px; margin:26px 0 14px}
+.zonehead .bar2{width:5px; height:26px; border-radius:3px; background:var(--zc)}
+.zonehead h2{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.7rem; line-height:1}
+.zonehead .tag{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--zc); border:1px solid color-mix(in srgb,var(--zc) 50%,transparent); padding:3px 8px; border-radius:20px}
+.zonehead::after{content:""; flex:1; height:1px; background:linear-gradient(90deg,color-mix(in srgb,var(--zc) 40%,transparent),var(--line))}
 
-@media(max-width:560px){
-  .match{grid-template-columns:58px 1fr auto 1fr; gap:8px; padding:11px 10px}
-  .match .t{font-size:.9rem}
-  .result{font-size:1.1rem; min-width:58px}
-  .match .slot{font-size:.66rem}
-}
+/* match grid + cards */
+.mgrid{display:grid; gap:12px; grid-template-columns:1fr}
+@media(min-width:620px){ .mgrid{grid-template-columns:1fr 1fr} }
+@media(min-width:920px){ .mgrid{grid-template-columns:1fr 1fr 1fr} }
+.mcard{position:relative; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--zc);
+  border-radius:12px; padding:13px 15px; transition:transform .16s ease, border-color .16s, box-shadow .16s;
+  animation:cardIn .4s cubic-bezier(.2,.7,.2,1) backwards; animation-delay:var(--d,0ms)}
+.mcard:hover{transform:translateY(-3px); border-color:color-mix(in srgb,var(--zc) 55%,var(--line));
+  box-shadow:0 12px 26px -16px var(--zc)}
+.mtop{display:flex; align-items:center; gap:8px; margin-bottom:12px}
+.pill{font-family:var(--font-mono); font-size:.64rem; letter-spacing:.06em; text-transform:uppercase;
+  padding:4px 8px; border-radius:6px; white-space:nowrap}
+.pill.time{background:var(--bg-2); color:var(--ink); border:1px solid var(--line)}
+.chip.zone{font-family:var(--font-mono); font-size:.62rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--zc); background:color-mix(in srgb,var(--zc) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--zc) 40%,transparent); padding:3px 8px; border-radius:20px; white-space:nowrap}
+.mtop .sp{flex:1}
+.status{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:20px}
+.status.prog{color:var(--faint); border:1px solid var(--line)}
+.status.final{color:var(--win); border:1px solid color-mix(in srgb,var(--win) 45%,transparent); background:color-mix(in srgb,var(--win) 12%,transparent)}
+.status.live{color:#fff; background:var(--live); display:inline-flex; align-items:center; gap:5px}
+.status.live::before{content:""; width:7px; height:7px; border-radius:50%; background:#fff; animation:pulse 1.1s infinite}
+.mbody{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px}
+.team{font-family:var(--font-display); font-weight:600; text-transform:uppercase; letter-spacing:.01em; font-size:1.16rem; line-height:1.05}
+.team.home{text-align:right}
+.team.away{text-align:left}
+.team.ph{color:var(--muted); font-weight:500}
+.score{min-width:58px; text-align:center; background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:7px 6px;
+  font-family:var(--font-display); font-weight:700; font-size:1.5rem; line-height:1; font-variant-numeric:tabular-nums}
+.score i{color:var(--faint); font-style:normal; margin:0 1px}
+.score.vs{font-family:var(--font-mono); font-size:.72rem; font-weight:400; letter-spacing:.08em; color:var(--faint); padding:9px 8px}
+.score .w{color:var(--zc)}
+.score .pen{display:block; font-family:var(--font-mono); font-weight:400; font-size:.54rem; color:var(--faint); letter-spacing:.04em; margin-top:4px}
 
 /* standings */
-.zonas-grid{display:grid; gap:18px; grid-template-columns:1fr}
-@media(min-width:720px){ .zonas-grid{grid-template-columns:1fr 1fr} }
-.ztable{border:1px solid var(--line)}
-.ztable .zh{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.2rem;
-  padding:12px 14px; border-bottom:1px solid var(--line); background:var(--bg-2); display:flex; justify-content:space-between; align-items:center}
-.ztable .zh .zt{font-family:var(--font-mono); font-size:.62rem; letter-spacing:.14em; color:var(--faint)}
+.zonas-grid{display:grid; gap:16px; grid-template-columns:1fr}
+@media(min-width:760px){ .zonas-grid{grid-template-columns:1fr 1fr} }
+.ztable{border:1px solid var(--line); border-radius:12px; overflow:hidden; border-top:3px solid var(--zc);
+  animation:cardIn .4s ease backwards; animation-delay:var(--d,0ms)}
+.ztable .zh{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.25rem;
+  padding:11px 14px; border-bottom:1px solid var(--line); background:color-mix(in srgb,var(--zc) 12%,var(--bg-2)); display:flex; justify-content:space-between; align-items:center}
+.ztable .zh .zt{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.12em; color:var(--zc)}
 table{width:100%; border-collapse:collapse; font-size:.9rem}
-th,td{padding:9px 6px; text-align:center; font-variant-numeric:tabular-nums}
-th{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); font-weight:400; border-bottom:1px solid var(--line)}
+th,td{padding:9px 5px; text-align:center; font-variant-numeric:tabular-nums}
+th{font-family:var(--font-mono); font-size:.58rem; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); font-weight:400; border-bottom:1px solid var(--line)}
 td{border-bottom:1px solid var(--line)}
 tbody tr:last-child td{border-bottom:0}
 .team-cell{text-align:left; font-family:var(--font-display); font-weight:600; text-transform:uppercase; font-size:1rem; white-space:nowrap}
-.pos{color:var(--faint); font-family:var(--font-mono); font-size:.72rem; width:22px}
-tr.q1 .pos, tr.q2 .pos{color:var(--win)}
-td.pts{font-family:var(--font-display); font-weight:700; font-size:1.05rem}
-.legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:14px; font-family:var(--font-mono); font-size:.66rem; letter-spacing:.06em; color:var(--faint); text-transform:uppercase}
-.legend .dot{display:inline-block; width:8px; height:8px; background:var(--win); margin-right:6px; vertical-align:middle}
+.pos{color:var(--faint); font-family:var(--font-mono); font-size:.72rem; width:26px}
+tr.q .pos{color:var(--zc); font-weight:700}
+tr.q{background:color-mix(in srgb,var(--zc) 7%,transparent)}
+tr.q .team-cell{border-left:3px solid var(--zc)}
+td.pts{font-family:var(--font-display); font-weight:700; font-size:1.1rem}
+.legend{display:flex; flex-wrap:wrap; gap:16px; margin-top:16px; font-family:var(--font-mono); font-size:.64rem; letter-spacing:.05em; color:var(--faint); text-transform:uppercase}
+.legend b{display:inline-flex; align-items:center; gap:6px; font-weight:400}
+.legend .sw{width:9px; height:9px; border-radius:2px; display:inline-block}
 
 /* bracket */
-.cups{display:grid; gap:26px; grid-template-columns:1fr}
-@media(min-width:860px){ .cups{grid-template-columns:1fr 1fr} }
-.cup{border:1px solid var(--line)}
-.cup .ch{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.5rem; letter-spacing:.02em;
-  padding:14px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; background:var(--bg-2)}
-.cup .ch .m{width:14px; height:14px; border-radius:50%}
-.cup.oro .ch .m{background:var(--white); box-shadow:0 0 0 4px rgba(255,255,255,.12)}
-.cup.plata .ch .m{background:var(--faint)}
-.round{padding:14px 16px}
+.cups{display:grid; gap:20px; grid-template-columns:1fr}
+@media(min-width:880px){ .cups{grid-template-columns:1fr 1fr} }
+.cup{border:1px solid var(--line); border-radius:14px; overflow:hidden; border-top:3px solid var(--zc);
+  animation:cardIn .4s ease backwards}
+.cup.oro{--zc:var(--oro)} .cup.plata{--zc:var(--plata)}
+.cup .ch{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.6rem; letter-spacing:.02em;
+  padding:14px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:11px;
+  background:color-mix(in srgb,var(--zc) 13%,var(--bg-2)); color:var(--zc)}
+.cup .ch .trophy{width:20px; height:20px}
+.round{padding:12px 16px}
 .round + .round{border-top:1px solid var(--line)}
-.round .rl{font-family:var(--font-mono); font-size:.64rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-bottom:10px}
-.tie{display:grid; grid-template-columns:72px 1fr; gap:10px; padding:9px 0; align-items:center}
+.round .rl{font-family:var(--font-mono); font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); margin-bottom:10px}
+.tie{display:grid; grid-template-columns:76px 1fr; gap:12px; padding:9px 0; align-items:center}
 .tie + .tie{border-top:1px dashed var(--line)}
-.tie .slot{font-family:var(--font-mono); font-size:.68rem; color:var(--muted); line-height:1.3}
-.tie .slot .c{display:block; color:var(--faint); font-size:.6rem}
-.tie .pair{display:flex; flex-direction:column; gap:3px}
-.tie .pair span{font-family:var(--font-display); font-weight:600; text-transform:uppercase; color:var(--muted); font-size:1rem}
+.tie .slot{font-family:var(--font-mono); font-size:.66rem; color:var(--muted); line-height:1.35}
+.tie .slot .c{display:block; color:var(--faint); font-size:.58rem}
+.tie .pair{display:flex; flex-direction:column; gap:4px; border-left:3px solid color-mix(in srgb,var(--zc) 45%,transparent); padding-left:10px}
+.tie .pair span{font-family:var(--font-display); font-weight:600; text-transform:uppercase; color:var(--muted); font-size:1.02rem}
+.tie .pair span b{color:var(--ink); font-weight:700; font-variant-numeric:tabular-nums}
 
 footer{border-top:1px solid var(--line); background:var(--bg-2)}
 footer .wrap{padding-block:26px; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px}
 footer img{height:26px}
 footer .sp{flex:1}
-footer .muted{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.1em; color:var(--faint); text-transform:uppercase}
+footer .muted{font-family:var(--font-mono); font-size:.66rem; letter-spacing:.1em; color:var(--faint); text-transform:uppercase}
 footer a.back{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.05em; text-decoration:none; color:var(--ink); font-size:.95rem}
+
+@keyframes cardIn{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+@keyframes pulse{0%{transform:scale(1); opacity:1}70%{transform:scale(1.6); opacity:.2}100%{transform:scale(1); opacity:1}}
+@keyframes paneIn{from{opacity:0} to{opacity:1}}
+.pane{animation:paneIn .25s ease}
 [hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important}
+  .mcard, .ztable, .cup{opacity:1!important; transform:none!important}
+  .mcard:hover{transform:none}
+}
 </style>
 </head>
 <body>
@@ -159,7 +199,7 @@ footer a.back{font-family:var(--font-display); font-weight:700; text-transform:u
 <div class="hero">
   <div class="wrap">
     <div class="eyebrow">Torneo de Fútbol 5 · Temporada 2026</div>
-    <h1>Fixture &amp; Resultados</h1>
+    <h1>Fixture &amp; <b>Resultados</b></h1>
     <div class="note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
       <p id="nota"></p>
@@ -185,9 +225,9 @@ footer a.back{font-family:var(--font-display); font-weight:700; text-transform:u
 </div>
 
 <main class="wrap">
-  <div id="pane-partidos"></div>
-  <div id="pane-posiciones" hidden></div>
-  <div id="pane-llave" hidden></div>
+  <div id="pane-partidos" class="pane"></div>
+  <div id="pane-posiciones" class="pane" hidden></div>
+  <div id="pane-llave" class="pane" hidden></div>
 </main>
 
 <footer>
@@ -205,32 +245,34 @@ const FIXTURE = {"torneo": "El Alargue", "temporada": "2026", "actualizado": "20
   "use strict";
   var F = FIXTURE;
   var NAMES = F.nombres || {};
+  var ZCOL = {A:"var(--zA)", B:"var(--zB)", C:"var(--zC)", D:"var(--zD)"};
   function name(id){ return NAMES[id] || id; }
-  function isPlaceholder(id){ return !NAMES[id]; }
+  function isPh(id){ return !NAMES[id]; }
+  function colorFor(p){
+    if(p.zona && ZCOL[p.zona]) return ZCOL[p.zona];
+    if(p.fase==='oro') return "var(--oro)";
+    if(p.fase==='plata') return "var(--plata)";
+    return "var(--line-2)";
+  }
+  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
 
   var state = { tab:"partidos", day:(F.dias[0]&&F.dias[0].id)||"s1", view:"horario" };
 
   document.getElementById('nota').textContent = F.nota || "";
   document.getElementById('upd').textContent = F.actualizado ? ("Actualizado " + F.actualizado) : "";
 
-  // day selector
   var daysEl = document.getElementById('days');
   F.dias.forEach(function(d,i){
     var b=document.createElement('button'); b.dataset.day=d.id;
-    b.innerHTML = d.label + ' <span class="mono" style="font-size:.7em;opacity:.7">'+d.fecha+'</span>';
+    b.innerHTML = d.label + ' <span class="mono" style="font-size:.7em;opacity:.65">'+d.fecha+'</span>';
     if(i===0) b.className='on';
-    b.addEventListener('click', function(){ state.day=d.id; syncControls(); render(); });
+    b.addEventListener('click', function(){ state.day=d.id; sync(); render(); });
     daysEl.appendChild(b);
   });
+  document.querySelectorAll('#tabs button').forEach(function(b){ b.addEventListener('click', function(){ state.tab=b.dataset.tab; sync(); render(); }); });
+  document.querySelectorAll('#view button').forEach(function(b){ b.addEventListener('click', function(){ state.view=b.dataset.view; sync(); render(); }); });
 
-  document.querySelectorAll('#tabs button').forEach(function(b){
-    b.addEventListener('click', function(){ state.tab=b.dataset.tab; syncControls(); render(); });
-  });
-  document.querySelectorAll('#view button').forEach(function(b){
-    b.addEventListener('click', function(){ state.view=b.dataset.view; syncControls(); render(); });
-  });
-
-  function syncControls(){
+  function sync(){
     document.querySelectorAll('#tabs button').forEach(function(b){ b.classList.toggle('on', b.dataset.tab===state.tab); });
     document.querySelectorAll('#days button').forEach(function(b){ b.classList.toggle('on', b.dataset.day===state.day); });
     document.querySelectorAll('#view button').forEach(function(b){ b.classList.toggle('on', b.dataset.view===state.view); });
@@ -238,137 +280,124 @@ const FIXTURE = {"torneo": "El Alargue", "temporada": "2026", "actualizado": "20
     document.getElementById('view').hidden = (state.tab!=='partidos');
   }
 
-  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
-
-  function resultHTML(p){
+  function statusHTML(p){
+    if(p.estado==='jugando') return '<span class="status live">En vivo</span>';
+    if(p.ga!=null && p.gb!=null) return '<span class="status final">Final</span>';
+    return '<span class="status prog">Programado</span>';
+  }
+  function scoreHTML(p){
     if(p.ga!=null && p.gb!=null){
-      var aw = p.ga>p.gb, bw = p.gb>p.ga;
-      var pen = (p.pa!=null&&p.pb!=null) ? '<span class="pen">('+p.pa+'-'+p.pb+' pen)</span>' : '';
-      return '<div class="result"><span class="'+(aw?'w':'')+'">'+p.ga+'</span> - <span class="'+(bw?'w':'')+'">'+p.gb+'</span>'+pen+'</div>';
+      var aw=p.ga>p.gb, bw=p.gb>p.ga;
+      var pen=(p.pa!=null&&p.pb!=null)?'<span class="pen">('+p.pa+'-'+p.pb+' pen)</span>':'';
+      return '<div class="score"><span class="'+(aw?'w':'')+'">'+p.ga+'</span><i>:</i><span class="'+(bw?'w':'')+'">'+p.gb+'</span>'+pen+'</div>';
     }
-    if(p.estado==='jugando') return '<div class="result vs">vs<span class="badge-live">En vivo</span></div>';
-    return '<div class="result vs">vs</div>';
+    return '<div class="score vs">VS</div>';
   }
-  function teamHTML(id, side, showZona){
-    var ph = isPlaceholder(id) ? ' ph' : '';
-    var z = (showZona && /^[A-D][1-4]$/.test(id)) ? '<span class="zchip">Z'+id[0]+'</span> ' : '';
-    return '<div class="t '+side+ph+'">'+(side==='home'?esc(name(id))+' '+z : z+esc(name(id)))+'</div>';
+  function chipHTML(p){
+    if(p.zona) return '<span class="chip zone">Zona '+p.zona+'</span>';
+    return '<span class="chip zone">'+esc(p.ronda)+'</span>';
   }
-  function matchHTML(p, showZona){
-    return '<div class="match">'
-      + '<div class="slot">'+p.hora+'<span class="c">Cancha '+p.cancha+'</span></div>'
-      + teamHTML(p.a,'home',showZona) + resultHTML(p) + teamHTML(p.b,'away',showZona)
-      + '</div>';
+  function card(p, i){
+    return '<article class="mcard" style="--zc:'+colorFor(p)+';--d:'+(i*45)+'ms">'
+      + '<div class="mtop"><span class="pill time">'+p.hora+' · Cancha '+p.cancha+'</span>'+chipHTML(p)+'<span class="sp"></span>'+statusHTML(p)+'</div>'
+      + '<div class="mbody">'
+      + '<div class="team home'+(isPh(p.a)?' ph':'')+'">'+esc(name(p.a))+'</div>'
+      + scoreHTML(p)
+      + '<div class="team away'+(isPh(p.b)?' ph':'')+'">'+esc(name(p.b))+'</div>'
+      + '</div></article>';
   }
 
-  function dayPartidos(day){ return F.partidos.filter(function(p){return p.dia===day;}); }
+  function dayP(day){ return F.partidos.filter(function(p){return p.dia===day;}); }
 
   function renderPartidos(){
-    var day = state.day;
-    var ps = dayPartidos(day);
-    var html = '';
+    var ps=dayP(state.day), html='', i=0;
     if(state.view==='horario'){
-      var horas = []; ps.forEach(function(p){ if(horas.indexOf(p.hora)<0) horas.push(p.hora); });
-      horas.sort();
+      var horas=[]; ps.forEach(function(p){ if(horas.indexOf(p.hora)<0) horas.push(p.hora); }); horas.sort();
       horas.forEach(function(h){
-        var grp = ps.filter(function(p){return p.hora===h;}).sort(function(a,b){return a.cancha-b.cancha;});
-        html += '<div class="section-h">'+h+' hs</div><div class="matches">';
-        grp.forEach(function(p){ html += matchHTML(p, true); });
-        html += '</div>';
+        var grp=ps.filter(function(p){return p.hora===h;}).sort(function(a,b){return a.cancha-b.cancha;});
+        html+='<div class="timehead"><span class="t">'+h+'<small>hs</small></span></div><div class="mgrid">';
+        grp.forEach(function(p){ html+=card(p,i++); });
+        html+='</div>';
+      });
+    } else if(state.day==='s1'){
+      Object.keys(F.zonas).forEach(function(z){
+        var grp=ps.filter(function(p){return p.zona===z;}).sort(function(a,b){return a.hora<b.hora?-1:1;});
+        html+='<div class="zonehead" style="--zc:'+ZCOL[z]+'"><span class="bar2"></span><h2>Zona '+z+'</h2><span class="tag">'+grp.length+' partidos</span></div><div class="mgrid">';
+        grp.forEach(function(p){ html+=card(p,i++); });
+        html+='</div>';
       });
     } else {
-      if(day==='s1'){
-        Object.keys(F.zonas).forEach(function(z){
-          var grp = ps.filter(function(p){return p.zona===z;}).sort(function(a,b){return a.hora<b.hora?-1:1;});
-          html += '<div class="section-h">Zona '+z+'</div><div class="matches">';
-          grp.forEach(function(p){ html += matchHTML(p, false); });
-          // libre (none in 4-team round robin) — skip
-          html += '</div>';
-        });
-      } else {
-        [['oro','Copa de Oro'],['plata','Copa de Plata']].forEach(function(f){
-          var grp = ps.filter(function(p){return p.fase===f[0];}).sort(function(a,b){return a.hora<b.hora?-1:1;});
-          html += '<div class="section-h">'+f[1]+'</div><div class="matches">';
-          grp.forEach(function(p){ html += matchHTML(p, false); });
-          html += '</div>';
-        });
-      }
+      [['oro','Copa de Oro','var(--oro)'],['plata','Copa de Plata','var(--plata)']].forEach(function(f){
+        var grp=ps.filter(function(p){return p.fase===f[0];}).sort(function(a,b){return a.hora<b.hora?-1:1;});
+        html+='<div class="zonehead" style="--zc:'+f[2]+'"><span class="bar2"></span><h2>'+f[1]+'</h2></div><div class="mgrid">';
+        grp.forEach(function(p){ html+=card(p,i++); });
+        html+='</div>';
+      });
     }
-    document.getElementById('pane-partidos').innerHTML = html;
+    document.getElementById('pane-partidos').innerHTML=html;
   }
 
-  function computeStandings(){
-    var tables = {};
-    Object.keys(F.zonas).forEach(function(z){
-      tables[z] = {};
-      F.zonas[z].forEach(function(t){ tables[z][t]={eq:t,pj:0,g:0,e:0,p:0,gf:0,gc:0}; });
-    });
+  function standings(){
+    var tb={};
+    Object.keys(F.zonas).forEach(function(z){ tb[z]={}; F.zonas[z].forEach(function(t){ tb[z][t]={eq:t,pj:0,g:0,e:0,p:0,gf:0,gc:0}; }); });
     F.partidos.forEach(function(p){
-      if(p.dia!=='s1' || p.fase!=='grupos') return;
-      if(p.ga==null || p.gb==null) return;
-      var r=tables[p.zona]; if(!r||!r[p.a]||!r[p.b]) return;
-      var A=r[p.a], B=r[p.b];
-      A.pj++; B.pj++; A.gf+=p.ga; A.gc+=p.gb; B.gf+=p.gb; B.gc+=p.ga;
-      if(p.ga>p.gb){A.g++;B.p++;} else if(p.gb>p.ga){B.g++;A.p++;} else {A.e++;B.e++;}
+      if(p.dia!=='s1'||p.fase!=='grupos'||p.ga==null||p.gb==null) return;
+      var r=tb[p.zona]; if(!r||!r[p.a]||!r[p.b]) return;
+      var A=r[p.a],B=r[p.b]; A.pj++;B.pj++;A.gf+=p.ga;A.gc+=p.gb;B.gf+=p.gb;B.gc+=p.ga;
+      if(p.ga>p.gb){A.g++;B.p++;}else if(p.gb>p.ga){B.g++;A.p++;}else{A.e++;B.e++;}
     });
     var out={};
-    Object.keys(tables).forEach(function(z){
-      var rows=Object.values(tables[z]).map(function(r){ r.dg=r.gf-r.gc; r.pts=r.g*3+r.e; return r; });
-      rows.sort(function(a,b){ return b.pts-a.pts || b.dg-a.dg || b.gf-a.gf || (a.eq<b.eq?-1:1); });
+    Object.keys(tb).forEach(function(z){
+      var rows=Object.values(tb[z]).map(function(r){r.dg=r.gf-r.gc;r.pts=r.g*3+r.e;return r;});
+      rows.sort(function(a,b){return b.pts-a.pts||b.dg-a.dg||b.gf-a.gf||(a.eq<b.eq?-1:1);});
       out[z]=rows;
     });
     return out;
   }
-
   function renderPosiciones(){
-    var st = computeStandings();
-    var html = '<div class="zonas-grid">';
+    var st=standings(), html='<div class="zonas-grid">', zi=0;
     Object.keys(st).forEach(function(z){
-      html += '<div class="ztable"><div class="zh">Zona '+z+' <span class="zt">Clasifican 2</span></div>'
-        + '<table><thead><tr><th></th><th class="team-cell" style="text-align:left">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th><th>Pts</th></tr></thead><tbody>';
+      html+='<div class="ztable" style="--zc:'+ZCOL[z]+';--d:'+(zi++*60)+'ms"><div class="zh">Zona '+z+' <span class="zt">Clasifican 2</span></div>'
+        +'<table><thead><tr><th></th><th class="team-cell" style="text-align:left">Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th><th>DG</th><th>Pts</th></tr></thead><tbody>';
       st[z].forEach(function(r,i){
-        var cls = i<2 ? ('q'+(i+1)) : '';
-        html += '<tr class="'+cls+'"><td class="pos">'+(i+1)+'</td><td class="team-cell">'+esc(name(r.eq))+'</td>'
-          + '<td>'+r.pj+'</td><td>'+r.g+'</td><td>'+r.e+'</td><td>'+r.p+'</td><td>'+r.gf+'</td><td>'+r.gc+'</td><td>'+(r.dg>0?'+':'')+r.dg+'</td><td class="pts">'+r.pts+'</td></tr>';
+        html+='<tr class="'+(i<2?'q':'')+'"><td class="pos">'+(i+1)+'</td><td class="team-cell">'+esc(name(r.eq))+'</td>'
+          +'<td>'+r.pj+'</td><td>'+r.g+'</td><td>'+r.e+'</td><td>'+r.p+'</td><td>'+r.gf+'</td><td>'+r.gc+'</td><td>'+(r.dg>0?'+':'')+r.dg+'</td><td class="pts">'+r.pts+'</td></tr>';
       });
-      html += '</tbody></table></div>';
+      html+='</tbody></table></div>';
     });
-    html += '</div><div class="legend"><span><span class="dot"></span>1º y 2º → Copa de Oro</span><span>3º y 4º → Copa de Plata</span></div>';
-    document.getElementById('pane-posiciones').innerHTML = html;
+    html+='</div><div class="legend"><b><span class="sw" style="background:var(--zA)"></span>1º y 2º → Copa de Oro</b><b><span class="sw" style="background:var(--plata)"></span>3º y 4º → Copa de Plata</b></div>';
+    document.getElementById('pane-posiciones').innerHTML=html;
   }
-
   function renderLlave(){
-    var ps = F.partidos.filter(function(p){return p.dia==='s2';});
-    var html = '<div class="cups">';
+    var ps=F.partidos.filter(function(p){return p.dia==='s2';}), html='<div class="cups">';
     [['oro','Copa de Oro'],['plata','Copa de Plata']].forEach(function(f){
-      html += '<div class="cup '+f[0]+'"><div class="ch"><span class="m"></span>'+f[1]+'</div>';
+      html+='<div class="cup '+f[0]+'"><div class="ch"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0Z"/><path d="M6 6H4a2 2 0 0 0 0 4h2M18 6h2a2 2 0 0 1 0 4h-2"/></svg>'+f[1]+'</div>';
       [['Cuartos','Cuartos de final'],['Semis','Semifinales'],['Final','Final']].forEach(function(rn){
-        var grp = ps.filter(function(p){return p.fase===f[0] && p.ronda===rn[0];}).sort(function(a,b){return a.hora<b.hora?-1:1;});
+        var grp=ps.filter(function(p){return p.fase===f[0]&&p.ronda===rn[0];}).sort(function(a,b){return a.hora<b.hora?-1:1;});
         if(!grp.length) return;
-        html += '<div class="round"><div class="rl">'+rn[1]+'</div>';
+        html+='<div class="round"><div class="rl">'+rn[1]+'</div>';
         grp.forEach(function(p){
-          var res = (p.ga!=null&&p.gb!=null) ? (' <span style="color:var(--white)">'+p.ga+'-'+p.gb+'</span>') : '';
-          html += '<div class="tie"><div class="slot">'+p.hora+'<span class="c">Cancha '+p.cancha+'</span></div>'
-            + '<div class="pair"><span>'+esc(name(p.a))+res+'</span><span>'+esc(name(p.b))+'</span></div></div>';
+          var ra=(p.ga!=null&&p.gb!=null)?' <b>'+p.ga+'</b>':'', rb=(p.ga!=null&&p.gb!=null)?' <b>'+p.gb+'</b>':'';
+          html+='<div class="tie"><div class="slot">'+p.hora+'<span class="c">Cancha '+p.cancha+'</span></div>'
+            +'<div class="pair"><span>'+esc(name(p.a))+ra+'</span><span>'+esc(name(p.b))+rb+'</span></div></div>';
         });
-        html += '</div>';
+        html+='</div>';
       });
-      html += '</div>';
+      html+='</div>';
     });
-    html += '</div>';
-    document.getElementById('pane-llave').innerHTML = html;
+    html+='</div>';
+    document.getElementById('pane-llave').innerHTML=html;
   }
 
   function render(){
-    document.getElementById('pane-partidos').hidden = state.tab!=='partidos';
-    document.getElementById('pane-posiciones').hidden = state.tab!=='posiciones';
-    document.getElementById('pane-llave').hidden = state.tab!=='llave';
-    if(state.tab==='partidos') renderPartidos();
-    else if(state.tab==='posiciones') renderPosiciones();
-    else renderLlave();
+    ['partidos','posiciones','llave'].forEach(function(t){
+      var el=document.getElementById('pane-'+t); el.hidden=(state.tab!==t);
+    });
+    var pane=document.getElementById('pane-'+state.tab);
+    if(state.tab==='partidos') renderPartidos(); else if(state.tab==='posiciones') renderPosiciones(); else renderLlave();
+    pane.style.animation='none'; void pane.offsetWidth; pane.style.animation='';
   }
-
-  syncControls(); render();
+  sync(); render();
 })();
 </script>
 </body>
