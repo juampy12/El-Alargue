@@ -437,16 +437,11 @@ const FIXTURE = {"torneo": "El Alargue", "temporada": "2026", "actualizado": "20
   }
   function renderTarjetas(){
     var el=document.getElementById('pane-tarjetas');
-    if(!TAR.length){ el.innerHTML=emptyState(ICON_CARD,'Sin tarjetas','Las amarillas y rojas se cargan a medida que se juega. Acá vas a ver quién está amonestado y el Fair Play por equipo.'); return; }
+    if(!TAR.length){ el.innerHTML=emptyState(ICON_CARD,'Sin tarjetas','Las amarillas y rojas se cargan a medida que se juega. Acá vas a ver quién está amonestado.'); return; }
     var rows=TAR.slice().sort(function(a,b){return ((b.rojas||0)-(a.rojas||0))||((b.amarillas||0)-(a.amarillas||0))||(a.jugador<b.jugador?-1:1);});
     var h='<div class="rank"><div class="rh">Tarjetas por jugador</div><table><thead><tr><th class="l">Jugador</th><th class="l">Equipo</th><th>Amar.</th><th>Rojas</th></tr></thead><tbody>';
     rows.forEach(function(r){ h+='<tr><td class="l nm">'+esc(r.jugador)+'</td><td class="l eq">'+esc(name(r.equipo))+'</td><td><span class="cc">'+(r.amarillas||0)+'</span><span class="card-ico yc"></span></td><td><span class="cc">'+(r.rojas||0)+'</span><span class="card-ico rc"></span></td></tr>'; });
     h+='</tbody></table></div>';
-    var tm={}; TAR.forEach(function(r){ var k=r.equipo; tm[k]=tm[k]||{eq:k,am:0,ro:0}; tm[k].am+=(r.amarillas||0); tm[k].ro+=(r.rojas||0); });
-    var tf=Object.keys(tm).map(function(k){var t=tm[k]; t.pts=t.am+t.ro*2; return t;}).sort(function(a,b){return a.pts-b.pts||(a.eq<b.eq?-1:1);});
-    h+='<div class="rank"><div class="rh">Fair Play por equipo</div><table><thead><tr><th class="pos"></th><th class="l">Equipo</th><th>Amar.</th><th>Rojas</th><th>Puntos</th></tr></thead><tbody>';
-    tf.forEach(function(t,i){ h+='<tr><td class="pos">'+(i+1)+'</td><td class="l nm">'+esc(name(t.eq))+'</td><td>'+t.am+'</td><td>'+t.ro+'</td><td class="g" style="color:var(--ink)">'+t.pts+'</td></tr>'; });
-    h+='</tbody></table><p class="fp-note">Menos puntos = más fair play · Amarilla 1 pt, Roja 2 pts</p></div>';
     el.innerHTML=h;
   }
 
