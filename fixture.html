@@ -163,6 +163,33 @@ td.pts{font-family:var(--font-display); font-weight:700; font-size:1.1rem}
 .tie .pair span{font-family:var(--font-display); font-weight:600; text-transform:uppercase; color:var(--muted); font-size:1.02rem}
 .tie .pair span b{color:var(--ink); font-weight:700; font-variant-numeric:tabular-nums}
 
+/* tabs scroll on small screens */
+#tabs{max-width:100%; overflow-x:auto; overflow-y:hidden; scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+
+/* ranking tables (goleadores / tarjetas / fair play) */
+.rank{border:1px solid var(--line); border-radius:12px; overflow:hidden; animation:cardIn .4s ease backwards}
+.rank.gol{border-top:3px solid var(--oro)}
+.rank + .rank{margin-top:18px}
+.rank .rh{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.2rem;
+  padding:12px 15px; border-bottom:1px solid var(--line); background:var(--bg-2); display:flex; align-items:center; gap:9px}
+.rank .rh svg{width:18px; height:18px; color:var(--oro)}
+.rank table th.l, .rank table td.l{text-align:left}
+.rank .nm{font-family:var(--font-display); font-weight:600; text-transform:uppercase; font-size:1rem}
+.rank .eq{color:var(--muted); font-family:var(--font-body); text-transform:none; font-weight:500; font-size:.9rem}
+.rank td.g{font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--oro)}
+.rank tr.top td.g{font-size:1.5rem}
+.rank tr.top .pos{color:var(--oro); font-weight:700}
+.rank tr.top{background:color-mix(in srgb,var(--oro) 8%,transparent)}
+.cc{font-variant-numeric:tabular-nums; margin-right:6px; font-weight:600}
+.card-ico{display:inline-block; width:12px; height:16px; border-radius:2px; vertical-align:-3px; box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.yc{background:var(--oro)} .rc{background:var(--live)}
+.fp-note{font-family:var(--font-mono); font-size:.6rem; letter-spacing:.04em; color:var(--faint); text-transform:uppercase; padding:10px 15px; margin:0; border-top:1px solid var(--line)}
+.empty{border:1px dashed var(--line-2); border-radius:14px; padding:46px 20px; text-align:center; color:var(--muted); margin-top:6px}
+.empty svg{width:36px; height:36px; color:var(--faint); margin-bottom:12px}
+.empty h3{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.3rem; color:var(--ink); margin:0 0 6px}
+.empty p{margin:0; font-size:.92rem; max-width:40ch; margin-inline:auto}
+
 footer{border-top:1px solid var(--line); background:var(--bg-2)}
 footer .wrap{padding-block:26px; display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px}
 footer img{height:26px}
@@ -213,6 +240,8 @@ footer a.back{font-family:var(--font-display); font-weight:700; text-transform:u
       <button data-tab="partidos" class="on">Partidos</button>
       <button data-tab="posiciones">Posiciones</button>
       <button data-tab="llave">Llave</button>
+      <button data-tab="goleadores">Goleadores</button>
+      <button data-tab="tarjetas">Tarjetas</button>
     </div>
     <div class="seg" id="days"></div>
     <div class="seg small" id="view">
@@ -228,6 +257,8 @@ footer a.back{font-family:var(--font-display); font-weight:700; text-transform:u
   <div id="pane-partidos" class="pane"></div>
   <div id="pane-posiciones" class="pane" hidden></div>
   <div id="pane-llave" class="pane" hidden></div>
+  <div id="pane-goleadores" class="pane" hidden></div>
+  <div id="pane-tarjetas" class="pane" hidden></div>
 </main>
 
 <footer>
@@ -389,12 +420,46 @@ const FIXTURE = {"torneo": "El Alargue", "temporada": "2026", "actualizado": "20
     document.getElementById('pane-llave').innerHTML=html;
   }
 
+  var GOL = F.goleadores || [];
+  var TAR = F.tarjetas || [];
+  var ICON_BALL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7.5l3.2 2.3-1.2 3.7h-4L8.8 9.8z"/></svg>';
+  var ICON_CARD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6.5" y="4" width="7" height="16" rx="1.4"/><rect x="11.5" y="4" width="7" height="16" rx="1.4" fill="var(--bg-2)"/></svg>';
+  function emptyState(svg,title,msg){ return '<div class="empty">'+svg+'<h3>'+title+'</h3><p>'+msg+'</p></div>'; }
+
+  function renderGoleadores(){
+    var el=document.getElementById('pane-goleadores');
+    if(!GOL.length){ el.innerHTML=emptyState(ICON_BALL,'Todavía no hay goles','La tabla de goleadores se arma a medida que se juegan los partidos.'); return; }
+    var rows=GOL.slice().sort(function(a,b){return b.goles-a.goles||(a.jugador<b.jugador?-1:1);});
+    var h='<div class="rank gol"><div class="rh">'+ICON_BALL.replace('width="1.5"','width="1.6"')+'Tabla de goleadores</div><table><thead><tr><th class="pos"></th><th class="l">Jugador</th><th class="l">Equipo</th><th>Goles</th></tr></thead><tbody>';
+    rows.forEach(function(r,i){ h+='<tr class="'+(i===0?'top':'')+'"><td class="pos">'+(i+1)+'</td><td class="l nm">'+esc(r.jugador)+'</td><td class="l eq">'+esc(name(r.equipo))+'</td><td class="g">'+r.goles+'</td></tr>'; });
+    h+='</tbody></table></div>';
+    el.innerHTML=h;
+  }
+  function renderTarjetas(){
+    var el=document.getElementById('pane-tarjetas');
+    if(!TAR.length){ el.innerHTML=emptyState(ICON_CARD,'Sin tarjetas','Las amarillas y rojas se cargan a medida que se juega. Acá vas a ver quién está amonestado y el Fair Play por equipo.'); return; }
+    var rows=TAR.slice().sort(function(a,b){return ((b.rojas||0)-(a.rojas||0))||((b.amarillas||0)-(a.amarillas||0))||(a.jugador<b.jugador?-1:1);});
+    var h='<div class="rank"><div class="rh">Tarjetas por jugador</div><table><thead><tr><th class="l">Jugador</th><th class="l">Equipo</th><th>Amar.</th><th>Rojas</th></tr></thead><tbody>';
+    rows.forEach(function(r){ h+='<tr><td class="l nm">'+esc(r.jugador)+'</td><td class="l eq">'+esc(name(r.equipo))+'</td><td><span class="cc">'+(r.amarillas||0)+'</span><span class="card-ico yc"></span></td><td><span class="cc">'+(r.rojas||0)+'</span><span class="card-ico rc"></span></td></tr>'; });
+    h+='</tbody></table></div>';
+    var tm={}; TAR.forEach(function(r){ var k=r.equipo; tm[k]=tm[k]||{eq:k,am:0,ro:0}; tm[k].am+=(r.amarillas||0); tm[k].ro+=(r.rojas||0); });
+    var tf=Object.keys(tm).map(function(k){var t=tm[k]; t.pts=t.am+t.ro*2; return t;}).sort(function(a,b){return a.pts-b.pts||(a.eq<b.eq?-1:1);});
+    h+='<div class="rank"><div class="rh">Fair Play por equipo</div><table><thead><tr><th class="pos"></th><th class="l">Equipo</th><th>Amar.</th><th>Rojas</th><th>Puntos</th></tr></thead><tbody>';
+    tf.forEach(function(t,i){ h+='<tr><td class="pos">'+(i+1)+'</td><td class="l nm">'+esc(name(t.eq))+'</td><td>'+t.am+'</td><td>'+t.ro+'</td><td class="g" style="color:var(--ink)">'+t.pts+'</td></tr>'; });
+    h+='</tbody></table><p class="fp-note">Menos puntos = más fair play · Amarilla 1 pt, Roja 2 pts</p></div>';
+    el.innerHTML=h;
+  }
+
   function render(){
-    ['partidos','posiciones','llave'].forEach(function(t){
+    ['partidos','posiciones','llave','goleadores','tarjetas'].forEach(function(t){
       var el=document.getElementById('pane-'+t); el.hidden=(state.tab!==t);
     });
     var pane=document.getElementById('pane-'+state.tab);
-    if(state.tab==='partidos') renderPartidos(); else if(state.tab==='posiciones') renderPosiciones(); else renderLlave();
+    if(state.tab==='partidos') renderPartidos();
+    else if(state.tab==='posiciones') renderPosiciones();
+    else if(state.tab==='llave') renderLlave();
+    else if(state.tab==='goleadores') renderGoleadores();
+    else renderTarjetas();
     pane.style.animation='none'; void pane.offsetWidth; pane.style.animation='';
   }
   sync(); render();
