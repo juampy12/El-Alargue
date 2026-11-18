@@ -324,6 +324,64 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
 @media(max-width:559px){ #mcta{display:block} body{padding-bottom:74px} }
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0}
+/* nav menu */
+.mainnav{display:flex; align-items:center; gap:2px}
+.mainnav a{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  font-size:.9rem; text-decoration:none; color:var(--muted); padding:.5em .65em; transition:color .14s; white-space:nowrap}
+.mainnav a:not(.btn):hover{color:var(--ink)}
+.mainnav a.btn{color:var(--navy); margin-left:6px}
+.navtoggle{display:none; width:42px; height:38px; background:transparent; border:1px solid var(--line-2); border-radius:8px;
+  cursor:pointer; padding:0; flex-direction:column; align-items:center; justify-content:center; gap:4px}
+.navtoggle span{display:block; width:18px; height:2px; background:var(--ink); transition:.2s}
+.navtoggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.navtoggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.navtoggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+@media(max-width:780px){
+  .navtoggle{display:inline-flex}
+  .mainnav{position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column;
+    align-items:stretch; gap:0; background:var(--bg); border-bottom:1px solid var(--line);
+    padding:4px max(22px,env(safe-area-inset-left,0px)) 16px; transform:translateY(-12px); opacity:0;
+    pointer-events:none; transition:.2s; z-index:49}
+  .mainnav.open{transform:none; opacity:1; pointer-events:auto}
+  .mainnav a{padding:.85em .2em; border-top:1px solid var(--line); font-size:1.06rem; color:var(--ink)}
+  .mainnav a.btn{margin:12px 0 0; text-align:center; padding:.75em; color:var(--navy)}
+}
+/* cómo funciona */
+.steps3{display:grid; gap:16px; grid-template-columns:1fr}
+@media(min-width:720px){ .steps3{grid-template-columns:repeat(3,1fr)} }
+.step3{border:1px solid var(--line); border-radius:14px; padding:22px; background:var(--surface)}
+.step3 .sn{display:inline-grid; place-items:center; width:42px; height:42px; border-radius:50%;
+  font-family:var(--font-display); font-weight:700; font-size:1.4rem; color:var(--navy); background:var(--white); margin-bottom:12px}
+.step3 h3{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.4rem; margin:0 0 6px}
+.step3 p{color:var(--muted); margin:0}
+/* formato flow */
+.flow{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:22px}
+.flow-box{border:1px solid var(--line); border-radius:12px; padding:12px 16px; background:var(--surface); text-align:center; flex:1 1 150px; min-width:0}
+.flow-box b{font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:1.3rem; display:block; line-height:1}
+.flow-box span{font-family:var(--font-mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.flow-box.oro{border-color:var(--line-2)} .flow-box.oro b{color:var(--white)}
+.flow-box.plata b{color:var(--muted)}
+.flow-arrow{font-family:var(--font-display); font-size:1.6rem; color:var(--faint); flex:0 0 auto}
+@media(max-width:560px){ .flow-arrow{transform:rotate(90deg); width:100%; text-align:center} .flow-box{flex-basis:100%} }
+/* FAQ */
+.faq{display:grid; gap:10px}
+.faq details{border:1px solid var(--line); border-radius:12px; background:var(--surface); overflow:hidden}
+.faq summary{list-style:none; cursor:pointer; padding:16px 18px; font-family:var(--font-display); font-weight:700;
+  text-transform:uppercase; font-size:1.12rem; display:flex; align-items:center; justify-content:space-between; gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+"; font-weight:400; color:var(--faint); font-size:1.5rem; line-height:1; transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:hover{color:var(--ink)}
+.faq p{margin:0; padding:0 18px 18px; color:var(--muted); line-height:1.6}
+.faq a{color:var(--white); text-decoration:underline; text-underline-offset:3px; font-weight:600}
+/* back to top */
+#toTop{position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); z-index:44; width:44px; height:44px;
+  border-radius:50%; border:1px solid var(--line-2); background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(8px); color:var(--ink); font-size:1.25rem; cursor:pointer; display:grid; place-items:center;
+  opacity:0; transform:translateY(10px); pointer-events:none; transition:.2s}
+#toTop.show{opacity:1; transform:none; pointer-events:auto}
+@media(max-width:559px){ #toTop{bottom:calc(84px + env(safe-area-inset-bottom,0px))} }
+
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *{animation:none!important}
@@ -350,8 +408,14 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
   <div class="wrap bar">
     <a class="brand" href="#top"><img src="el-alargue-logo.png" alt="El Alargue"><span class="wm">El Alargue</span></a>
     <span class="spacer"></span>
-    <a class="fx-link" href="fixture.html">Fixture</a>
-    <a class="btn btn-white btn-sm" href="#inscripcion">Inscribite</a>
+    <nav class="mainnav" id="mainnav">
+      <a href="#tercer-tiempo">Tercer tiempo</a>
+      <a href="#formato">Cómo se juega</a>
+      <a href="#faq">FAQ</a>
+      <a href="fixture.html">Fixture</a>
+      <a class="btn btn-white btn-sm" href="#inscripcion">Inscribite</a>
+    </nav>
+    <button class="navtoggle" id="navtoggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mainnav"><span></span><span></span><span></span></button>
   </div>
 </header>
 
@@ -423,8 +487,20 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
     </div>
   </div>
 
+  <!-- CÓMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">En simple</span><h2>Cómo funciona</h2></div>
+      <div class="steps3 reveal">
+        <div class="step3"><span class="sn">1</span><h3>Inscribí tu equipo</h3><p>Armá tu lista de buena fe (hasta 10 jugadores) y mandás la planilla por WhatsApp.</p></div>
+        <div class="step3"><span class="sn">2</span><h3>Jugás dos sábados</h3><p>El 19/12 la fase de grupos y el 26/12 las eliminaciones: Copa de Oro o Copa de Plata.</p></div>
+        <div class="step3"><span class="sn">3</span><h3>Tercer tiempo</h3><p>Al terminar, la juntada: DJ, algo para tomar y a compartir con los amigos.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- TERCER TIEMPO -->
-  <section class="tt">
+  <section class="tt" id="tercer-tiempo">
     <div class="wrap">
       <div class="head reveal"><span class="no">01</span><h2>El tercer tiempo</h2></div>
       <div class="tt-grid">
@@ -442,10 +518,16 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
   </section>
 
   <!-- FORMATO -->
-  <section>
+  <section id="formato">
     <div class="wrap">
       <div class="head reveal"><span class="no">02</span><h2>Cómo se juega</h2>
         <p>16 equipos en 4 zonas de 4. El primer sábado se define la tabla; el segundo, los mano a mano. 3 canchas en simultáneo, de 17:00 a 22:00.</p></div>
+      <div class="flow reveal">
+        <div class="flow-box"><b>4 Zonas</b><span>de 4 equipos</span></div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-box oro"><b>1º y 2º</b><span>Copa de Oro</span></div>
+        <div class="flow-box plata"><b>3º y 4º</b><span>Copa de Plata</span></div>
+      </div>
       <div class="days reveal">
         <div class="day">
           <span class="tag">Sábado 1 · 19 Dic</span>
@@ -505,6 +587,22 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
             <span class="pill">5 en cancha</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">Dudas</span><h2>Preguntas frecuentes</h2></div>
+      <div class="faq reveal">
+        <details><summary>¿Cuánto cuesta la inscripción?</summary><p>El valor se confirma en la semana. Apenas lo tengamos lo vas a ver acá y te lo pasamos al anotarte.</p></details>
+        <details><summary>¿Dónde se juega?</summary><p>La sede está a confirmar. Les avisamos a todos los equipos inscriptos antes del torneo.</p></details>
+        <details><summary>¿Cuántos jugadores lleva cada equipo?</summary><p>Una lista de buena fe de hasta 10 jugadores. En la cancha se juega 5 contra 5.</p></details>
+        <details><summary>¿Quiénes pueden jugar?</summary><p>Es un torneo de nivel amateur: no pueden participar jugadores que jueguen actualmente al fútbol en algún club.</p></details>
+        <details><summary>¿Qué pasa si pierdo el primer sábado?</summary><p>Igual seguís jugando. Los 3º y 4º de cada zona pasan a la <b>Copa de Plata</b> y pelean su propia final.</p></details>
+        <details><summary>¿Qué es el tercer tiempo?</summary><p>Es la juntada después de los partidos: música, barra y mesa con los amigos. Para nosotros es tan importante como el torneo.</p></details>
+        <details><summary>¿Cómo me inscribo?</summary><p>Completás la <a href="#inscripcion">planilla de inscripción</a> y se envía por WhatsApp al organizador. Te confirmamos el cupo y la seña.</p></details>
       </div>
     </div>
   </section>
@@ -589,6 +687,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
 </footer>
 
 <div id="mcta"><a class="btn btn-white" href="#inscripcion">Inscribí tu equipo</a></div>
+<button id="toTop" type="button" aria-label="Volver arriba">↑</button>
 
 <script>
 (function(){
@@ -805,6 +904,21 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
       try{ await navigator.clipboard.writeText(url); var o=shareBtn.textContent; shareBtn.textContent='¡Link copiado!'; setTimeout(function(){ shareBtn.textContent=o; },1600); }
       catch(e){ if(window.prompt) window.prompt('Copiá el link:', url); }
     });
+  }
+  var navToggle=document.getElementById('navtoggle'), mainnav=document.getElementById('mainnav');
+  if(navToggle && mainnav){
+    var closeNav=function(){ mainnav.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); };
+    navToggle.addEventListener('click', function(){
+      var open=!mainnav.classList.contains('open');
+      mainnav.classList.toggle('open', open); navToggle.setAttribute('aria-expanded', open?'true':'false');
+    });
+    mainnav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeNav); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeNav(); });
+  }
+  var toTop=document.getElementById('toTop');
+  if(toTop){
+    addEventListener('scroll', function(){ toTop.classList.toggle('show', (document.documentElement.scrollTop||document.body.scrollTop) > 700); }, {passive:true});
+    toTop.addEventListener('click', function(){ try{ scrollTo({top:0, behavior:'smooth'}); }catch(e){ scrollTo(0,0); } });
   }
   refresh();
 })();
