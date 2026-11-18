@@ -68,6 +68,7 @@ a{color:inherit}
 @keyframes introLogo{to{opacity:1; transform:none}}
 @keyframes introUp{to{opacity:1; transform:none}}
 @keyframes introOut{to{opacity:0; visibility:hidden; pointer-events:none}}
+html.introseen #intro{display:none}
 
 /* buttons */
 .btn{position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.5em;
@@ -374,6 +375,9 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
 .faq summary:hover{color:var(--ink)}
 .faq p{margin:0; padding:0 18px 18px; color:var(--muted); line-height:1.6}
 .faq a{color:var(--white); text-decoration:underline; text-underline-offset:3px; font-weight:600}
+/* mapa */
+.mapwrap{position:relative; border:1px solid var(--line); border-radius:14px; overflow:hidden; aspect-ratio:16/9; max-height:440px; background:var(--surface)}
+.mapwrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
 /* back to top */
 #toTop{position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); z-index:44; width:44px; height:44px;
   border-radius:50%; border:1px solid var(--line-2); background:color-mix(in srgb,var(--bg) 82%,transparent);
@@ -392,7 +396,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
 </style>
 </head>
 <body>
-<script>document.documentElement.classList.add('js');</script>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('alargue-intro')){document.documentElement.classList.add('introseen');}else{sessionStorage.setItem('alargue-intro','1');}}catch(e){}</script>
 
 <div id="progress" aria-hidden="true"></div>
 
@@ -411,6 +415,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
     <nav class="mainnav" id="mainnav">
       <a href="#tercer-tiempo">Tercer tiempo</a>
       <a href="#formato">Cómo se juega</a>
+      <a href="#donde">Dónde</a>
       <a href="#faq">FAQ</a>
       <a href="fixture.html">Fixture</a>
       <a class="btn btn-white btn-sm" href="#inscripcion">Inscribite</a>
@@ -591,6 +596,18 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
     </div>
   </section>
 
+  <!-- DÓNDE -->
+  <section id="donde">
+    <div class="wrap">
+      <div class="head reveal"><span class="no">Sede</span><h2>Dónde se juega</h2>
+        <p>El torneo es en <b>Charata, Chaco</b>. La cancha exacta todavía está a confirmar: apenas la tengamos, les avisamos a todos los equipos inscriptos.</p></div>
+      <div class="mapwrap reveal">
+        <iframe src="https://www.google.com/maps?q=Charata,Chaco,Argentina&z=13&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de Charata, Chaco"></iframe>
+      </div>
+      <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=Charata%2C%20Chaco%2C%20Argentina" target="_blank" rel="noopener" style="margin-top:16px; display:inline-flex">Abrir en Google Maps</a>
+    </div>
+  </section>
+
   <!-- FAQ -->
   <section id="faq">
     <div class="wrap">
@@ -688,6 +705,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
 
 <div id="mcta"><a class="btn btn-white" href="#inscripcion">Inscribí tu equipo</a></div>
 <button id="toTop" type="button" aria-label="Volver arriba">↑</button>
+<script>if(location.hostname.indexOf('claude')<0&&location.hostname.indexOf('localhost')<0&&location.protocol.indexOf('http')===0){var s=document.createElement('script');s.defer=true;s.src='/_vercel/insights/script.js';document.head.appendChild(s);}</script>
 
 <script>
 (function(){
