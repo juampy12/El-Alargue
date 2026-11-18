@@ -6,6 +6,18 @@
 <meta name="description" content="Inscripcion al torneo de futbol 5 El Alargue: 16 equipos, dos sabados, Copa de Oro y Copa de Plata, y un gran tercer tiempo.">
 <meta name="theme-color" content="#09152b">
 <title>El Alargue</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="El Alargue">
+<meta property="og:title" content="El Alargue — Torneo de Fútbol 5">
+<meta property="og:description" content="16 equipos, dos sábados (19 y 26 de diciembre) y el mejor tercer tiempo. ¡Inscribí tu equipo!">
+<meta property="og:image" content="https://el-alargue.vercel.app/og-image.png">
+<meta property="og:url" content="https://el-alargue.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="El Alargue — Torneo de Fútbol 5">
+<meta name="twitter:description" content="16 equipos, dos sábados y el mejor tercer tiempo. ¡Inscribí tu equipo!">
+<meta name="twitter:image" content="https://el-alargue.vercel.app/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
@@ -15,7 +27,7 @@
 :root{
   --navy:#09152b;
   --bg:#09152b; --bg-2:#0b1a33; --surface:#0f1f3b; --surface-2:#13223f;
-  --ink:#f4f7fc; --muted:#9fabc4; --faint:#8491ad;
+  --ink:#f4f7fc; --muted:#a6b1c8; --faint:#97a3bd;
   --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.26);
   --white:#ffffff; --focus:#9fc3ff;
   --font-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
@@ -377,6 +389,7 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
         <div class="cta">
           <a class="btn btn-white" href="#inscripcion">Inscribí tu equipo</a>
           <a class="btn btn-line" href="#bases">Ver las bases</a>
+          <button class="btn btn-line" id="shareBtn" type="button">Compartir</button>
         </div>
       </div>
       <div class="emblem"><span class="rings" aria-hidden="true"></span><img src="el-alargue-logo.png" alt="Logo El Alargue"></div>
@@ -783,6 +796,16 @@ footer .muted{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1e
       }).catch(fb);
     } else fb();
   });
+  var shareBtn = document.getElementById('shareBtn');
+  if(shareBtn){
+    shareBtn.addEventListener('click', async function(){
+      var url = location.href.split('#')[0];
+      var payload = {title:'El Alargue — Torneo de Fútbol 5', text:'Sumate al torneo de fútbol 5 El Alargue ⚽', url:url};
+      if(navigator.share){ try{ await navigator.share(payload); return; }catch(e){ if(e && e.name==='AbortError') return; } }
+      try{ await navigator.clipboard.writeText(url); var o=shareBtn.textContent; shareBtn.textContent='¡Link copiado!'; setTimeout(function(){ shareBtn.textContent=o; },1600); }
+      catch(e){ if(window.prompt) window.prompt('Copiá el link:', url); }
+    });
+  }
   refresh();
 })();
 </script>
